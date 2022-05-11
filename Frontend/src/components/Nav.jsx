@@ -11,16 +11,13 @@ const Nav = () => {
           <img src={logoMain} alt="logo" className="nav-logo" />
         </Link>
         <ul>
-          <Link to="/" className="Link">
-            Home
+          <Link to="/campaign" className="Link">
+            Inscribirme
           </Link>
-          <Link to="/" className="Link">
-            Usuarios
+          <Link to="/turns" className="Link">
+            Turnos
           </Link>
-          <Link to="/" className="Link">
-            Vacunas
-          </Link>
-          <Link to="/" className="Link">
+          <Link to="/account" className="Link">
             Editar perfil
           </Link>
         </ul>

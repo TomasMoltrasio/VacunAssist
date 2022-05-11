@@ -6,7 +6,7 @@ const CreateAccount = () => {
     <div className="CreateAccount">
       <div className="CreateAccount-container">
         <h1 className="title">Mi cuenta</h1>
-        <form className="form">
+        <form className="form" action="/account">
           <div>
             <label for="dni" className="label">
               DNI

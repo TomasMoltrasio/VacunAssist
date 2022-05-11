@@ -5,6 +5,8 @@ import Layout from "@containers/Layout";
 import LayoutNav from "@containers/LayoutNav";
 import CreateAccount from "@pages/CreateAccount";
 import MyAccount from "@pages/MyAccount";
+import Campaign from "@pages/Campaign";
+import Turns from "@pages/Turns";
 import "@styles/global.css";
 import NotFound from "../pages/NotFound";
 
@@ -19,6 +21,8 @@ const App = () => {
           </Route>
           <Route element={<LayoutNav />}>
             <Route exact path="account" element={<MyAccount />} />
+            <Route exact path="campaign" element={<Campaign />} />
+            <Route exact path="turns" element={<Turns />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

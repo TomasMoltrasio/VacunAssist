@@ -33,6 +33,13 @@ nav {
     align-items: center;
     justify-content: center;
 }
+
+.navbar-right {
+	display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .navbar-left ul {
 	margin-left: 12px;
 }
@@ -54,11 +61,12 @@ nav {
 }
 .navbar-email {
 	color: var(--very-light-pink);
-	font-size: var(--sm);
+	font-size: var(--lg);
 	margin-right: 12px;
 }
 .navbar-shopping-cart {
 	position: relative;
+	font-size: 20px;
 }
 .navbar-shopping-cart div {
 	width: 16px;
