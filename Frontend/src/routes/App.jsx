@@ -1,7 +1,30 @@
 import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "@pages/Login";
+import Layout from "@containers/Layout";
+import LayoutNav from "@containers/LayoutNav";
+import CreateAccount from "@pages/CreateAccount";
+import MyAccount from "@pages/MyAccount";
+import "@styles/global.css";
+import NotFound from "../pages/NotFound";
 
 const App = () => {
-  return <div>Hola</div>;
+  return (
+    <BrowserRouter>
+      <div className="container">
+        <Routes>
+          <Route element={<Layout />}>
+            <Route exact path="/" element={<Login />} />
+            <Route exact path="create-account" element={<CreateAccount />} />
+          </Route>
+          <Route element={<LayoutNav />}>
+            <Route exact path="account" element={<MyAccount />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </div>
+    </BrowserRouter>
+  );
 };
 
 export default App;

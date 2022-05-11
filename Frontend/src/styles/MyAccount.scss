@@ -1,0 +1,121 @@
+@import 'vars';
+
+.MyAccount {
+	width: 100%;
+	height: 100vh;
+	display: grid;
+	place-items: center;
+}
+.MyAccount-container {
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+	width: 300px;
+	justify-content: space-between;
+}
+.logo {
+	width: 150px;
+	margin-bottom: 48px;
+	justify-self: center;
+	display: none;
+}
+.title {
+	font-size: var(--lg);
+	margin-bottom: 36px;
+	text-align: start;
+}
+.form {
+	display: flex;
+	flex-direction: column;
+}
+.form div {
+	display: flex;
+	flex-direction: column;
+}
+.label {
+	font-size: var(--sm);
+	font-weight: bold;
+	margin-bottom: 4px;
+}
+.value {
+	color: var(--very-light-pink);
+	font-size: var(--md);
+	margin: 8px 0 32px 0;
+	width: 220px;
+	height: 20px;
+	margin: auto;
+}
+.secondary-button {
+	background-color: var(--white);
+	border-radius: 8px;
+	border: 1px solid var(--hospital-green);
+	color: var(--hospital-green);
+	width: 100%;
+	cursor: pointer;
+	font-size: var(--md);
+	font-weight: bold;
+	height: 50px;
+}
+.login-button-my-account {
+	margin-top: 14px;
+	margin-bottom: 30px;
+}
+
+
+.edit-button {
+	width: 50px;
+	height: 30px;
+	margin: auto;
+	border-radius: 50%;
+	font-size: xx-small;
+}
+
+.form .div-email {
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 15px;
+}
+
+.formPersonalAccount {
+	display: flex;
+	  align-items: center;
+	justify-content: center;
+  }
+  
+  
+  .formPersonalAccount .labelDecision{
+	padding: 6px 30px;
+	border-radius: 20px;
+	border: 2px solid #ccc;
+  }
+  
+  .boxDecision:checked + label{
+	background: var(--hospital-green);
+	color: white;
+	border: 2px solid var(--very-light-pink);
+  }
+  
+  .boxDecision{
+	display: none;
+  }
+
+  .lista {
+	  list-style: none;
+	  margin-top: 10px;
+	  text-align: center;
+  }
+
+  .spanEdad {
+	  margin-top: 25px;
+	  text-align: center;
+	  font-size:large;
+  }
+
+@media (max-width: 640px) {
+	.form-container {
+		height: 100%;
+	}
+	.form {
+		height: 100%;
+		justify-content: space-between;
+	}
+}
