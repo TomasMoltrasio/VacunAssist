@@ -5,23 +5,26 @@
 	height: 100vh;
 	display: grid;
 	place-items: center;
+	color: black;
 }
 .MyAccount-container {
+	margin-top: 50px;
 	display: grid;
 	grid-template-rows: auto 1fr auto;
 	width: 300px;
 	justify-content: space-between;
-}
-.logo {
-	width: 150px;
-	margin-bottom: 48px;
-	justify-self: center;
-	display: none;
+	background-color: var(--white);
+	padding: 30px;
+	border-radius: 10px;
+	border: 3px solid var(--very-light-pink);
+	align-self: start;
+	
 }
 .title {
-	font-size: var(--lg);
+	font-size: 30px;
 	margin-bottom: 36px;
-	text-align: start;
+	margin-top: -10px;
+	text-align: center;
 }
 .form {
 	display: flex;
@@ -56,7 +59,7 @@
 	height: 50px;
 }
 .login-button-my-account {
-	margin-top: 14px;
+	margin-top: 30px;
 	margin-bottom: 30px;
 }
 
@@ -90,7 +93,7 @@
   
   .boxDecision:checked + label{
 	background: var(--hospital-green);
-	color: white;
+	color: var(--white);
 	border: 2px solid var(--very-light-pink);
   }
   
@@ -102,12 +105,20 @@
 	  list-style: none;
 	  margin-top: 10px;
 	  text-align: center;
+	  padding: 5px;
   }
 
   .spanEdad {
 	  margin-top: 25px;
 	  text-align: center;
 	  font-size:large;
+  }
+
+  .spanDosis {
+	  margin: 20px 0px;
+	  text-align: center;
+	  font-size: large;
+	  
   }
 
 @media (max-width: 640px) {

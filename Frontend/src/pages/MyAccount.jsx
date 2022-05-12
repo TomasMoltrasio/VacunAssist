@@ -51,10 +51,10 @@ const MyAccount = () => {
               <b>¿Padece alguna de las siguientes condiciones?</b>
             </span>
             <ul className="lista">
-              <li>Embarazo</li>
               <li>Problemas cardiacos</li>
-              <li>Obesidad</li>
               <li>Problemas respiratorios</li>
+              <li>Embarazo</li>
+              <li>Obesidad</li>
             </ul>
             <form className="formPersonalAccount">
               <input
@@ -76,6 +76,41 @@ const MyAccount = () => {
               />
               <label className="labelDecision" htmlFor="siForm">
                 Si
+              </label>
+            </form>
+            <span className="spanDosis">
+              <b>Ultima dosis dada de COVID 19</b>
+            </span>
+            <form className="formPersonalAccount">
+              <input
+                className="boxDecision"
+                type="radio"
+                name="decision"
+                defaultValue="1"
+                id="primera"
+              />
+              <label className="labelDecision activo" htmlFor="primera">
+                1°
+              </label>
+              <input
+                className="boxDecision"
+                type="radio"
+                name="decision"
+                defaultValue="2"
+                id="segunda"
+              />
+              <label className="labelDecision" htmlFor="segunda">
+                2°
+              </label>
+              <input
+                className="boxDecision"
+                type="radio"
+                name="decision"
+                defaultValue="3"
+                id="tercera"
+              />
+              <label className="labelDecision" htmlFor="tercera">
+                3°
               </label>
             </form>
           </div>

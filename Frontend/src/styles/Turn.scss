@@ -1,5 +1,31 @@
 @import 'vars';
 
+h1{
+    text-align: center;
+}
+
+.table-container {
+    background-color: var(--hospital-green);
+    border-radius: 10px;
+    border: 3px solid var(--very-light-pink);
+    padding: 10px 60px;
+}
+
+.Turn-titulo{
+    font-size: 25px;
+    color: var(--white);
+}
+
+
+
+.boxPresente{
+    display: none;
+}
+
+.posponer {
+    background-color: var(--white);
+    border: 1px solid var(--very-light-pink);
+}
 
 .cancelar {
     background-color: red;

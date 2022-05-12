@@ -4,18 +4,16 @@ import "@styles/Turn.scss";
 const TurnLast = () => {
   return (
     <div className="Turn-container">
-      <table>
-        <tr>
+      <table className="table-container">
+        <tr className="Turn-titulo">
           <th>Dosis</th>
           <th>Fecha</th>
-          <th>Presente</th>
+          <th>Aplicada</th>
         </tr>
         <tr>
           <th>Covid</th>
           <th>17/06</th>
-          <th>
-            <input type="checkbox" />
-          </th>
+          <th>✓</th>
         </tr>
       </table>
     </div>
