@@ -10,13 +10,19 @@ nav {
 .menu {
 	display: none;
 }
+
+.logo-container-nav{
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	margin-right: 50px;
+
+}
+
 .nav-logo {
-	width: 100px;
-	padding: 10px;
-    background-color: #2ABA40;
+	width: 50px;
     border-radius: 10px;
-    box-shadow: 10px 5px 3px black;
-    margin-right: 100px;
+	padding: 5px;
 }
 .navbar-left ul,
 .navbar-right ul {
@@ -28,6 +34,15 @@ nav {
 	height: 60px;
     color: var(--white);
 }
+
+.nombre-logo-nav{
+	margin-top: -9px;
+	color: var(--white);
+	font-size: var(--lg);
+	text-decoration: none;
+	text-align: center;
+}
+
 .navbar-left {
 	display: flex;
     align-items: center;

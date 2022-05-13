@@ -1,15 +1,19 @@
 import React from "react";
 import "@styles/Nav.scss";
-import logoMain from "@logos/Logo.png";
+import logoMain from "@logos/Logo_VacunAssist.png";
 import { Link } from "react-router-dom";
 
 const Nav = () => {
   return (
     <nav>
       <div className="navbar-left">
-        <Link to="/">
-          <img src={logoMain} alt="logo" className="nav-logo" />
-        </Link>
+        <div className="logo-container-nav">
+          <Link to="/">
+            <img src={logoMain} alt="logo" className="nav-logo" />
+          </Link>
+          <span className="nombre-logo-nav">VacunAssist</span>
+        </div>
+
         <ul>
           <Link to="/campaign" className="Link">
             Inscribirme
