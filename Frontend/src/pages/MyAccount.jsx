@@ -39,15 +39,15 @@ const MyAccount = () => {
                 Editar
               </button>
             </div>
-            <label for="password" className="label">
+            {/* <label for="password" className="label">
               Elegir vacunatorio
             </label>
             <select name="vacunatorio" id="">
               <option value="">Hospital 9 de Julio</option>
               <option value="">Corralón municipal</option>
               <option value="">Polideportivo</option>
-            </select>
-            <span className="spanEdad">
+            </select> */}
+            {/* <span className="spanEdad">
               <b>¿Padece alguna de las siguientes condiciones?</b>
             </span>
             <ul className="lista">
@@ -77,7 +77,7 @@ const MyAccount = () => {
               <label className="labelDecision" htmlFor="siForm">
                 Si
               </label>
-            </form>
+            </form> */}
             <span className="spanDosis">
               <b>Ultima dosis dada de COVID 19</b>
             </span>

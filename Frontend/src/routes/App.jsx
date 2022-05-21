@@ -7,6 +7,7 @@ import CreateAccount from "@pages/CreateAccount";
 import MyAccount from "@pages/MyAccount";
 import Campaign from "@pages/Campaign";
 import Turns from "@pages/Turns";
+import CompleteRegister from "@pages/CompleteRegister";
 import "@styles/global.css";
 import NotFound from "../pages/NotFound";
 
@@ -18,6 +19,11 @@ const App = () => {
           <Route element={<Layout />}>
             <Route exact path="/" element={<Login />} />
             <Route exact path="create-account" element={<CreateAccount />} />
+            <Route
+              exact
+              path="complete-register"
+              element={<CompleteRegister />}
+            />
           </Route>
           <Route element={<LayoutNav />}>
             <Route exact path="account" element={<MyAccount />} />

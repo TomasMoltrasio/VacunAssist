@@ -7,5 +7,5 @@ mongoose.connect(URI);
 const connection = mongoose.connection;
 
 connection.once('open', () => {
-    console.log("La base de datos esta conectada")
-})
+  console.log('La base de datos esta conectada');
+});

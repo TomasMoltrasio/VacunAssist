@@ -1,15 +1,9 @@
-const express = require('express');
+const app = require('./app');
 require('./database');
 
-const app = express();
-const PORT = 8080;
+async function main() {
+  await app.listen(app.get('port'));
+  console.log(`Servidor corriendo en puerto `, app.get('port'));
+}
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
-});
-
-app.use(express.json());
-
-app.get('/', (req, res) => {
-  res.send('Aprobanos ruso');
-});
+main();
