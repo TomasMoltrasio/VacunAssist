@@ -2,8 +2,11 @@ const { Schema, model } = require('mongoose');
 
 const listaEsperaSchema = new Schema({
   dni: Number,
-  marca: String,
-  dosis: { type: Number, default: 0 },
+  covid: Number,
+  gripe: Boolean,
+  fiebre: Boolean,
+  edad: Number,
+  riesgo: Boolean,
   vacunatorio: Number,
 });
 

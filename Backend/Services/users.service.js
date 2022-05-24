@@ -11,7 +11,7 @@ userService.getUser = async (req, res) => {
 userService.createUser = async (req, res) => {
   const user = await User.find({ dni: Number(req.body.dni) });
   if (user.length !== 0) {
-    res.status(400).send('El DNI ya esta registrado');
+    res.status(500).send('El DNI ya esta registrado');
   } else {
     const data = {
       dni: req.body.dni,

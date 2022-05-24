@@ -5,7 +5,7 @@ const turnoSchema = new Schema({
   marca: String,
   dosis: { type: Number, default: 0 },
   fecha: Date,
-  lote: Date,
+  lote: String,
   vacunatorio: Number,
   presente: Boolean,
 });
