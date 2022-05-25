@@ -1,19 +1,36 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import "@styles/Login.scss";
 import logo from "@logos/Logo_VacunAssist_1.png";
 import { Link } from "react-router-dom";
 
 const Login = () => {
   const form = useRef(null);
+  const [dni, setDNI] = useState(null);
+  const [tramite, setTramite] = useState(null);
+  const [sexo, setSexo] = useState(null);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData(form.current);
     const data = {
-      username: formData.get("email"),
-      password: formData.get("password"),
+      tramite,
+      sexo,
     };
-    console.log(data);
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/v1/users/${dni}`,
+        {
+          method: "POST", // or 'PUT'
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const usuario = await response.json();
+      console.log(usuario);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -29,6 +46,8 @@ const Login = () => {
             name="dni"
             placeholder="23456789"
             className="input input-email"
+            value={dni}
+            onChange={(e) => setDNI(e.target.value)}
           />
           <label htmlFor="password" className="label">
             Numero de tramite
@@ -38,6 +57,8 @@ const Login = () => {
             name="numeroTramite"
             placeholder="*********"
             className="input input-password"
+            value={tramite}
+            onChange={(e) => setTramite(e.target.value)}
           />
           <div className="infoPersonalLogin">
             <form className="formPersonalLogin">
@@ -47,6 +68,7 @@ const Login = () => {
                 name="sexo"
                 defaultValue="Mujer"
                 id="mujerFormLogin"
+                onChange={() => setSexo("F")}
               />
               <label className="labelsexLogin activo" htmlFor="mujerFormLogin">
                 Mujer
@@ -57,6 +79,7 @@ const Login = () => {
                 name="sexo"
                 defaultValue="Hombre"
                 id="hombreFormLogin"
+                onChange={() => setSexo("M")}
               />
               <label className="labelsexLogin" htmlFor="hombreFormLogin">
                 Hombre

@@ -6,6 +6,9 @@ const CreateAccount = () => {
   const [dni, setDNI] = useState(null);
   const [password, setPassword] = useState(null);
   const [sexo, setSexo] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [vacunatorio, setVacunatorio] = useState(null);
+  const [riesgo, setRiesgo] = useState(null);
 
   const handle = (e) => {
     e.target.name === "dni"
@@ -17,8 +20,43 @@ const CreateAccount = () => {
     e.target.id === "hombreForm" ? setSexo("M") : setSexo("F");
   };
 
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleVacunatorio = (e) => {
+    setVacunatorio(e.target.value);
+  };
+
+  const handleRiesgo = (e) => {
+    e.target.id === "noForm" ? setRiesgo(false) : setRiesgo(true);
+  };
+
   const confirmarDatos = async (e) => {
     e.preventDefault();
+    const data = {
+      dni,
+      tramite: password,
+      sexo,
+      email,
+      vacunatorio,
+      riesgo,
+      rol: "3",
+    };
+    console.log(data);
+    try {
+      const response = await fetch("http://localhost:3000/api/v1/users", {
+        method: "POST", // or 'PUT'
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const usuario = await response.json();
+      console.log(usuario);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -61,6 +99,8 @@ const CreateAccount = () => {
               id="email"
               placeholder="fernando@example.com"
               className="input input-email"
+              value={email}
+              onChange={handleEmail}
               required
             />
           </div>
@@ -92,6 +132,47 @@ const CreateAccount = () => {
               </label>
             </form>
           </div>
+          <label for="password" className="label">
+            Elegir vacunatorio
+          </label>
+          <select name="vacunatorio" onChange={handleVacunatorio}>
+            <option value="1">Hospital 9 de Julio</option>
+            <option value="2">Corralón municipal</option>
+            <option value="3">Polideportivo</option>
+          </select>
+          <span className="spanEdad">
+            <b>¿Padece alguna de las siguientes condiciones?</b>
+          </span>
+          <ul className="lista">
+            <li>Problemas cardiacos</li>
+            <li>Problemas respiratorios</li>
+            <li>Embarazo</li>
+            <li>Obesidad</li>
+          </ul>
+          <form className="formPersonalAccount">
+            <input
+              className="boxDecision"
+              type="radio"
+              name="decision"
+              defaultValue="No"
+              id="noForm"
+              onChange={handleRiesgo}
+            />
+            <label className="labelDecision activo" htmlFor="noForm">
+              No
+            </label>
+            <input
+              className="boxDecision"
+              type="radio"
+              name="decision"
+              defaultValue="Si"
+              id="siForm"
+              onChange={handleRiesgo}
+            />
+            <label className="labelDecision" htmlFor="siForm">
+              Si
+            </label>
+          </form>
           <input
             type="submit"
             value="Crear usuario"

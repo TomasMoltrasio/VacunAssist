@@ -7,7 +7,7 @@ const turnoSchema = new Schema({
   fecha: Date,
   lote: String,
   vacunatorio: Number,
-  presente: Boolean,
+  presente: String,
 });
 
 module.exports = model('Turno', turnoSchema);

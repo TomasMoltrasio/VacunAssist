@@ -4,8 +4,33 @@ const urlBase = 'https://hhvur3txna.execute-api.sa-east-1.amazonaws.com/dev';
 const axios = require('axios');
 
 userService.getUser = async (req, res) => {
-  const user = await User.find({ dni: Number(req.params.id) });
-  res.json(user);
+  const data = {
+    dni: req.params.id,
+    tramite: req.body.tramite,
+    sexo: req.body.sexo,
+  };
+  const headers = {
+    'Content-Type': 'application/json',
+    'X-Api-Key': 'kTKtFQmwC01y0wdgE93Mn3bOhWYgt7Ty4KY3yZsU',
+  };
+  try {
+    const response = await axios.post(
+      `${urlBase}/person/validate`,
+      JSON.stringify(data),
+      {
+        headers: headers,
+      }
+    );
+    const user = await User.findOne({ dni: response.data.numeroDocumento });
+    res.json(user);
+  } catch (error) {
+    res.status(500).send('El usuario no existe');
+  }
+};
+
+userService.getUsers = async (req, res) => {
+  const users = await User.find();
+  res.json(users);
 };
 
 userService.createUser = async (req, res) => {

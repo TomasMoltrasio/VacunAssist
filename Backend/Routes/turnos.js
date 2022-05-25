@@ -5,12 +5,13 @@ const {
   getTurn,
   getTurns,
   deleteTurn,
+  deleteTurns,
   updateTurn,
 } = require('../Services/turns.service');
 
 const router = Router();
 
-router.route('/').get(getTurns).post(createTurn);
+router.route('/').get(getTurns).post(createTurn).delete(deleteTurns);
 
 router
   .route('/:id')

@@ -3,44 +3,64 @@ const Turn = require('../models/Turno');
 const List = require('../models/ListaEspera');
 
 const generateCovid = async (list) => {
-  const turn = await Turn.find({ dni: Number(list.dni), marca: 'Covid' });
-  console.log('turno covid', turn);
-  const date = Date(turn[0].fecha) || new Date();
-  if (turn[0].fecha && turn[0].dosis !== 3) {
-    return date.setDate(date.getDate() + 30);
+  const turn = await Turn.find({ dni: list[0].dni });
+  const turnCovid = turn.filter((turn) => turn.marca === 'Covid');
+  if (
+    turnCovid.length > 0 &&
+    turnCovid.find((turno) => turno.presente === 'activo')
+  )
+    return 'error';
+  const date = new Date();
+  if (
+    turnCovid.length !== 0 &&
+    (list[0].riesgo === true || list[0].edad > 60)
+  ) {
+    return turnCovid[0].fecha.setDate(turnCovid[0].fecha.getDate() + 30);
   } else {
-    if (list.riesgo === true || list.edad > 60) {
-      date.setDate(date.getDate() + 7);
+    if (list[0].riesgo === true || list[0].edad > 60) {
+      return date.setDate(date.getDate() + 7);
+    } else {
+      return 'error';
     }
   }
 };
 const generateGripe = async (list) => {
-  const turn = await Turn.find({ dni: Number(list.dni), marca: 'Gripe' });
-  const date = Date(turn[0].fecha) || new Date();
-  if (turn[0].fecha) {
-    return date.setDate(date.getDate() + 365);
+  const turn = await Turn.find({
+    dni: list[0].dni,
+  });
+  const turnGripe = turn.filter((turn) => turn.marca === 'Gripe');
+  if (
+    turnGripe.length > 0 &&
+    turnGripe.find((turno) => turno.presente === 'activo')
+  )
+    return 'error';
+  const date = new Date();
+  if (turnGripe.length !== 0 && list[0].edad > 60) {
+    return turnGripe[0].fecha.setDate(turnGripe[0].fecha.getDate() + 365);
   } else {
-    return list.edad > 60
+    return list[0].edad > 60
       ? date.setDate(date.getDate() + 90)
       : date.setDate(date.getDate() + 180);
   }
 };
 
 const caseVacuna = async (dni) => {
-  const list = await List.find({ dni: Number(dni) });
+  const list = await List.find({ dni: dni });
   const turnos = [];
-  if (list[0].covid === 1) {
+  const fechaCovid = await generateCovid(list);
+  const fechaGripe = await generateGripe(list);
+  if (list[0].covid !== 0 && fechaCovid !== 'error') {
     turnos.push({
       marca: 'Covid',
       dosis: list[0].covid,
-      fecha: generateCovid(list),
+      fecha: fechaCovid,
       vacunatorio: list[0].vacunatorio,
     });
   }
-  if (list[0].gripe === true) {
+  if (list[0].gripe === true && fechaGripe !== 'error') {
     turnos.push({
       marca: 'Gripe',
-      fecha: Date(generateGripe(list)),
+      fecha: fechaGripe,
       vacunatorio: list[0].vacunatorio,
     });
   }
@@ -48,21 +68,22 @@ const caseVacuna = async (dni) => {
 };
 
 turnService.createTurn = async (req, res) => {
-  const turnos = caseVacuna(req.body.dni);
+  const turnos = await caseVacuna(req.body.dni);
   if (turnos.length !== 0) {
-    for (const index in turnos) {
-      const newTurn = new Turn({
+    turnos.forEach(async (turno) => {
+      await new Turn({
         dni: Number(req.body.dni),
-        marca: turnos[index].marca,
-        dosis: turnos[index].dosis || 0,
-        fecha: turnos[index].fecha,
+        marca: turno.marca,
+        dosis: turno.dosis || 0,
+        fecha: turno.fecha,
         lote: req.body.lote || '',
-        vacunatorio: Number(turnos[index].vacunatorio),
-        presente: req.body.presente || false,
-      });
-      await newTurn.save();
-      res.json('Turno creado');
-    }
+        vacunatorio: turno.vacunatorio,
+        presente: 'activo',
+      }).save();
+    });
+    res.json('Turno creado');
+  } else {
+    res.send('No se genera ningun turno');
   }
 };
 
@@ -74,7 +95,7 @@ turnService.createTurnLast = async (req, res) => {
     fecha: new Date(req.body.fecha),
     lote: req.body.lote,
     vacunatorio: 4,
-    presente: true,
+    presente: 'aplicada',
   });
   await newTurn.save();
   res.json('Turno creado');
@@ -109,6 +130,11 @@ turnService.updateTurn = async (req, res) => {
 turnService.deleteTurn = async (req, res) => {
   await Turn.findByIdAndDelete(req.params.id);
   res.json('Turno eliminado');
+};
+
+turnService.deleteTurns = async (req, res) => {
+  await Turn.deleteMany({});
+  res.json('eliminados');
 };
 
 module.exports = turnService;

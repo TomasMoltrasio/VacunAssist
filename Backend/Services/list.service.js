@@ -31,8 +31,9 @@ listService.updateEspera = async (req, res) => {
     riesgo: req.body.riesgo || list[0].riesgo,
     vacunatorio: Number(req.body.vacunatorio) || list[0].vacunatorio,
     covid: Number(req.body.covid) || list[0].covid,
-    fiebre: req.body.fiebre || list[0].fiebre,
-    gripe: req.body.gripe || list[0].gripe,
+    fiebre: req.body.fiebre === null ? list[0].fiebre : req.body.fiebre,
+    gripe: req.body.gripe === null ? list[0].gripe : req.body.gripe,
+    edad: req.body.edad || list[0].edad,
   };
   await List.findOneAndUpdate({ dni: req.params.id }, newList);
   res.json('Lista actualizada');
