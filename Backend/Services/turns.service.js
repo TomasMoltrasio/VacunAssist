@@ -15,7 +15,14 @@ const generateCovid = async (list) => {
     turnCovid.length !== 0 &&
     (list[0].riesgo === true || list[0].edad > 60)
   ) {
-    return turnCovid[0].fecha.setDate(turnCovid[0].fecha.getDate() + 30);
+    let fecha = new Date(
+      turnCovid[0].fecha.setDate(turnCovid[0].fecha.getDate() + 30)
+    );
+    if (fecha.getTime() - new Date().getTime()) {
+      return date.setDate(date.getDate() + 7);
+    } else {
+      return fecha;
+    }
   } else {
     if (list[0].riesgo === true || list[0].edad > 60) {
       return date.setDate(date.getDate() + 7);
@@ -36,7 +43,14 @@ const generateGripe = async (list) => {
     return 'error';
   const date = new Date();
   if (turnGripe.length !== 0) {
-    return turnGripe[0].fecha.setDate(turnGripe[0].fecha.getDate() + 365);
+    let fecha = new Date(
+      turnGripe[0].fecha.setDate(turnGripe[0].fecha.getDate() + 365)
+    );
+    if (fecha.getTime() - new Date().getTime()) {
+      return date.setDate(date.getDate() + 180);
+    } else {
+      return fecha;
+    }
   } else {
     return list[0].edad > 60
       ? date.setDate(date.getDate() + 90)

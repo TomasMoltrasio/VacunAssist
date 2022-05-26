@@ -2,6 +2,7 @@ import React from "react";
 import "@styles/Nav.scss";
 import logoMain from "@logos/Logo_VacunAssist.png";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { useAuth } from "../context/useAuth";
 
 const Nav = () => {
@@ -34,6 +35,11 @@ const Nav = () => {
           <Link to="/turns" className="Link">
             Turnos
           </Link>
+          {auth.user.rol === 2 ? (
+            <Link to="/turns-vacunador" className="Link">
+              Turnos vacunador
+            </Link>
+          ) : null}
           <Link to="/account" className="Link">
             Editar perfil
           </Link>
