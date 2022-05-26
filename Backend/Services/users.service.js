@@ -82,13 +82,14 @@ userService.updateUser = async (req, res) => {
     vacunatorioTrabajo:
       Number(req.body.vacunatorioTrabajo) || user[0].vacunatorioTrabajo,
     riesgo: req.body.riesgo || user[0].riesgo,
+    rol: req.body.rol || user[0].rol,
   };
   await User.findOneAndUpdate({ dni: Number(req.params.id) }, newUser);
   res.json(user);
 };
 
 userService.deleteUser = async (req, res) => {
-  await User.findOneAndDelete(req.params.id);
+  await User.findOneAndDelete({ dni: req.params.id });
   res.json('Usuario eliminado');
 };
 

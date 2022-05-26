@@ -1,13 +1,17 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import "@styles/Login.scss";
-import logo from "@logos/Logo_VacunAssist_1.png";
-import { Link } from "react-router-dom";
+import logo from "@logos/Logo_VacunAssist.png";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/useAuth";
+import swal from "sweetalert";
+import axios from "axios";
 
 const Login = () => {
-  const form = useRef(null);
   const [dni, setDNI] = useState(null);
   const [tramite, setTramite] = useState(null);
   const [sexo, setSexo] = useState(null);
+  const auth = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -27,9 +31,10 @@ const Login = () => {
         }
       );
       const usuario = await response.json();
-      console.log(usuario);
+      await auth.login(usuario);
+      navigate("/campaign");
     } catch (error) {
-      console.log(error);
+      swal({ title: "Inicio de sesion fallido", icon: "error" });
     }
   };
 
@@ -37,7 +42,7 @@ const Login = () => {
     <div className="Login">
       <div className="Login-container">
         <img src={logo} alt="logo" className="logo" />
-        <form action="/" className="form" ref={form}>
+        <form action="/" className="form">
           <label htmlFor="email" className="label">
             DNI
           </label>

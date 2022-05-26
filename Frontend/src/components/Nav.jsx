@@ -2,8 +2,21 @@ import React from "react";
 import "@styles/Nav.scss";
 import logoMain from "@logos/Logo_VacunAssist.png";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/useAuth";
 
 const Nav = () => {
+  const auth = useAuth();
+  const handle = () => {
+    switch (auth.user.rol) {
+      case 1:
+        return "Administrador";
+      case 2:
+        return "Vacunador";
+      case 3:
+        return "Ciudadano";
+    }
+  };
+
   return (
     <nav>
       <div className="navbar-left">
@@ -28,8 +41,8 @@ const Nav = () => {
       </div>
       <div className="navbar-right">
         <ul>
-          <li className="navbar-email">Aministrador</li>
-          <li className="navbar-shopping-cart">Tomas Moltrasio</li>
+          <li className="navbar-email">{`${handle()}`}</li>
+          <li className="navbar-shopping-cart">{`${auth.user.nombre} ${auth.user.apellido}`}</li>
         </ul>
       </div>
     </nav>

@@ -35,7 +35,7 @@ const generateGripe = async (list) => {
   )
     return 'error';
   const date = new Date();
-  if (turnGripe.length !== 0 && list[0].edad > 60) {
+  if (turnGripe.length !== 0) {
     return turnGripe[0].fecha.setDate(turnGripe[0].fecha.getDate() + 365);
   } else {
     return list[0].edad > 60
@@ -49,7 +49,7 @@ const caseVacuna = async (dni) => {
   const turnos = [];
   const fechaCovid = await generateCovid(list);
   const fechaGripe = await generateGripe(list);
-  if (list[0].covid !== 0 && fechaCovid !== 'error') {
+  if (list[0].covid > 0 && fechaCovid !== 'error') {
     turnos.push({
       marca: 'Covid',
       dosis: list[0].covid,
@@ -118,10 +118,11 @@ turnService.updateTurn = async (req, res) => {
     dni: turn.dni,
     marca: turn.marca,
     dosis: turn.dosis || 0,
-    fecha: turn.fecha,
-    lote: req.body.lote,
+    fecha:
+      turn.fecha.setDate(turn.fecha.getDate() + req.body.fecha) || turn.fecha,
+    lote: req.body.lote || turn.lote,
     vacunatorio: turn.vacunatorio,
-    presente: req.body.presente,
+    presente: req.body.presente || turn.presente,
   });
   await Turn.findByIdAndUpdate(req.params.id, newTurn);
   res.json(newTurn);

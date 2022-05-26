@@ -10,29 +10,32 @@ import Turns from "@pages/Turns";
 import CompleteRegister from "@pages/CompleteRegister";
 import "@styles/global.css";
 import NotFound from "../pages/NotFound";
+import { AuthProvider } from "../context/useAuth";
 
 const App = () => {
   return (
     <BrowserRouter>
-      <div className="container">
-        <Routes>
-          <Route element={<Layout />}>
-            <Route exact path="/" element={<Login />} />
-            <Route exact path="create-account" element={<CreateAccount />} />
-            <Route
-              exact
-              path="complete-register"
-              element={<CompleteRegister />}
-            />
-          </Route>
-          <Route element={<LayoutNav />}>
-            <Route exact path="account" element={<MyAccount />} />
-            <Route exact path="campaign" element={<Campaign />} />
-            <Route exact path="turns" element={<Turns />} />
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
-      </div>
+      <AuthProvider>
+        <div className="container">
+          <Routes>
+            <Route element={<Layout />}>
+              <Route exact path="/" element={<Login />} />
+              <Route exact path="create-account" element={<CreateAccount />} />
+              <Route
+                exact
+                path="complete-register"
+                element={<CompleteRegister />}
+              />
+            </Route>
+            <Route element={<LayoutNav />}>
+              <Route exact path="account" element={<MyAccount />} />
+              <Route exact path="campaign" element={<Campaign />} />
+              <Route exact path="turns" element={<Turns />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
+        </div>
+      </AuthProvider>
     </BrowserRouter>
   );
 };

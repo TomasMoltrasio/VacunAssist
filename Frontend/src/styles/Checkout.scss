@@ -3,14 +3,13 @@
 
 .checkout{
     margin: 0 auto;
-    width: 400px;
-    
+    width: 1400px;
 }
 
 .checkout-items {
     margin-top: 80px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 }
 
 .card{
@@ -24,6 +23,12 @@
     text-align: center;
 }
 
+
+
+.titulo-calendario{
+    margin-bottom: 9px;
+}
+
 .btn-inscripcion {
     text-decoration: none;
 	color: var(--very-light-pink);
@@ -31,11 +36,55 @@
 	padding: 15px 40px;
 	border-radius: 8px;
     background-color: var(--white);
-    margin-bottom: 15px;
+    margin-top: 10%;
     font-size: large;
+}
+
+.card-content :disabled {
+    background-color: var(--very-light-pink);
+    border: 1px solid var(--white);
+    color: var(--white);
+}
+
+.btn-confirmar-gripe{
+    text-decoration: none;
+	color: var(--very-light-pink);
+	border: 1px solid var(--very-light-pink);
+	padding: 2px 10px;
+	border-radius: 8px;
+    background-color: var(--white);
+    margin-top: 5px;
+    font-size: small;
 }
 
 .card-content{
     color:var(--white);
-
+    height: 350px;
 }
+
+.fecha-container-covid {
+    margin-top: -15px;
+}
+
+.formPersonalCampaign {
+    display: flex;
+    align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.formPersonalCampaign .labelDecision{
+	padding: 6px 30px;
+	border-radius: 20px;
+	border: 2px solid #ccc;
+  }
+  
+  .boxDecision:checked + label{
+	background: var(--white);
+	color: var(--very-light-pink);
+	border: 2px solid var(--hospital-green);
+  }
+  
+  .boxDecision{
+	display: none;
+  }
