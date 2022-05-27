@@ -8,6 +8,7 @@ import MyAccount from "@pages/MyAccount";
 import Campaign from "@pages/Campaign";
 import Turns from "@pages/Turns";
 import CompleteRegister from "@pages/CompleteRegister";
+import TurnVacunator from "@pages/TurnVacunator";
 import "@styles/global.css";
 import NotFound from "../pages/NotFound";
 import { AuthProvider } from "../context/useAuth";
@@ -31,6 +32,11 @@ const App = () => {
               <Route exact path="account" element={<MyAccount />} />
               <Route exact path="campaign" element={<Campaign />} />
               <Route exact path="turns" element={<Turns />} />
+              <Route
+                exact
+                path="/turns-vacunador"
+                element={<TurnVacunator />}
+              />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

@@ -15,13 +15,11 @@ const generateCovid = async (list) => {
     turnCovid.length !== 0 &&
     (list[0].riesgo === true || list[0].edad > 60)
   ) {
-    let fecha = new Date(
-      turnCovid[0].fecha.setDate(turnCovid[0].fecha.getDate() + 30)
-    );
-    if (fecha.getTime() - new Date().getTime()) {
+    let fecha = turnCovid[0].fecha.setDate(turnCovid[0].fecha.getDate() + 30);
+    if (fecha - new Date().getTime() < 0) {
       return date.setDate(date.getDate() + 7);
     } else {
-      return fecha;
+      return new Date(fecha);
     }
   } else {
     if (list[0].riesgo === true || list[0].edad > 60) {
@@ -42,14 +40,13 @@ const generateGripe = async (list) => {
   )
     return 'error';
   const date = new Date();
+
   if (turnGripe.length !== 0) {
-    let fecha = new Date(
-      turnGripe[0].fecha.setDate(turnGripe[0].fecha.getDate() + 365)
-    );
-    if (fecha.getTime() - new Date().getTime()) {
+    let fecha = turnGripe[0].fecha.setDate(turnGripe[0].fecha.getDate() + 365);
+    if (fecha - new Date().getTime() < 0) {
       return date.setDate(date.getDate() + 180);
     } else {
-      return fecha;
+      return new Date(fecha);
     }
   } else {
     return list[0].edad > 60
@@ -63,7 +60,7 @@ const caseVacuna = async (dni) => {
   const turnos = [];
   const fechaCovid = await generateCovid(list);
   const fechaGripe = await generateGripe(list);
-  if (list[0].covid > 0 && fechaCovid !== 'error') {
+  if (list[0].covid > 0 && list[0].covid < 4 && fechaCovid !== 'error') {
     turnos.push({
       marca: 'Covid',
       dosis: list[0].covid,
@@ -106,10 +103,10 @@ turnService.createTurnLast = async (req, res) => {
     dni: Number(req.params.id),
     marca: req.body.marca,
     dosis: req.body.dosis || 0,
-    fecha: new Date(req.body.fecha),
+    fecha: new Date(req.body.fecha) || new Date(),
     lote: req.body.lote,
-    vacunatorio: 4,
-    presente: 'aplicada',
+    vacunatorio: req.body.vacunatorio || 4,
+    presente: req.body.presente || 'aplicada',
   });
   await newTurn.save();
   res.json('Turno creado');

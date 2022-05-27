@@ -55,7 +55,7 @@ const TurnActive = ({ turno }) => {
           <th>Fecha</th>
           <th>Vacunatorio</th>
           <th>Posponer</th>
-          <th>Cancelar</th>
+          {/* <th>Cancelar</th> */}
         </tr>
         <tr>
           <th>{turno.marca}</th>
@@ -67,11 +67,11 @@ const TurnActive = ({ turno }) => {
               ◷
             </button>
           </th>
-          <th>
+          {/* <th>
             <button className="cancelar" onClick={() => cancelarTurno()}>
               X
             </button>
-          </th>
+          </th> */}
         </tr>
       </table>
     </div>

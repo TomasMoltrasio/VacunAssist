@@ -157,7 +157,7 @@ const Campaign = () => {
       setDisFiebre(true);
     }
     if (data.edad < 18) {
-      setDisCovid(!disCovid);
+      setDisCovid(true);
     }
   };
 

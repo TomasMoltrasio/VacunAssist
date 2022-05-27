@@ -93,12 +93,28 @@ const MyAccount = () => {
             covid: covid,
           }
         );
-        console.log(res);
+        auth.setearEspera(res.data);
+        const { data } = await axios.get(
+          `http://localhost:3000/api/v1/turns/${auth.user.dni}`
+        );
+        const turnoFiltro = data
+          .filter((turno) => turno.marca === "Covid")
+          .filter((turno) => turno.dosis < covid)
+          .filter((turno) => turno.presente === "activo");
+        turnoFiltro.map(
+          async (turno) =>
+            await axios.delete(
+              `http://localhost:3000/api/v1/turns/${turno._id}`
+            )
+        );
+
+        swal({
+          title: "Dosis ingresada con exito",
+          icon: "success",
+        });
+      } else {
+        null;
       }
-      swal({
-        title: "Dosis ingresada con exito",
-        icon: "success",
-      });
     });
   };
 
