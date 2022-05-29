@@ -1,14 +1,19 @@
 import React from "react";
 import "@styles/Nav.scss";
 import logoMain from "@logos/Logo_VacunAssist.png";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
+import Cookies from "universal-cookie";
+import { FaShareSquare } from "react-icons/fa";
+import swal from "sweetalert";
 
 const Nav = () => {
+  const cookie = new Cookies();
+  const user = cookie.get("user");
   const auth = useAuth();
+  const navigate = useNavigate();
   const handle = () => {
-    switch (auth.user.rol) {
+    switch (user.rol) {
       case 1:
         return "Administrador";
       case 2:
@@ -18,11 +23,25 @@ const Nav = () => {
     }
   };
 
+  const cerrarSesion = () => {
+    swal({
+      title: "Cerrar sesión",
+      text: "¿Estas seguro de que deseas cerrar sesión?",
+      icon: "warning",
+      buttons: ["NO", "SI"],
+    }).then(async (r) => {
+      if (r) {
+        auth.logout();
+        navigate("/");
+      }
+    });
+  };
+
   return (
     <nav>
       <div className="navbar-left">
         <div className="logo-container-nav">
-          <Link to="/">
+          <Link to="/campaign">
             <img src={logoMain} alt="logo" className="nav-logo" />
           </Link>
           <span className="nombre-logo-nav">VacunAssist</span>
@@ -35,7 +54,7 @@ const Nav = () => {
           <Link to="/turns" className="Link">
             Turnos
           </Link>
-          {auth.user.rol === 2 ? (
+          {user.rol === 2 ? (
             <Link to="/turns-vacunador" className="Link">
               Turnos vacunador
             </Link>
@@ -48,8 +67,14 @@ const Nav = () => {
       <div className="navbar-right">
         <ul>
           <li className="navbar-email">{`${handle()}`}</li>
-          <li className="navbar-shopping-cart">{`${auth.user.nombre} ${auth.user.apellido}`}</li>
+          <li className="navbar-shopping-cart">{`${user.nombre} ${user.apellido}`}</li>
         </ul>
+        <FaShareSquare
+          className="cerrar-sesion"
+          onClick={() => {
+            cerrarSesion();
+          }}
+        />
       </div>
     </nav>
   );

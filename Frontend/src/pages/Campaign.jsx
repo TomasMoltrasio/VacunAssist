@@ -4,6 +4,7 @@ import "@styles/Checkout.scss";
 import axios from "axios";
 import { useAuth } from "../context/useAuth";
 import swal from "sweetalert";
+import Cookies from "universal-cookie";
 
 const Campaign = () => {
   const [covid, setCovid] = useState(false);
@@ -12,6 +13,9 @@ const Campaign = () => {
   const [disCovid, setDisCovid] = useState(false);
   const [disFiebre, setDisFiebre] = useState(false);
   const auth = useAuth();
+  const cookie = new Cookies();
+  const user = cookie.get("user");
+  const espera = cookie.get("espera");
 
   const btnCovid = () => {
     !covid
@@ -24,11 +28,11 @@ const Campaign = () => {
           if (r) {
             setCovid(!covid);
             const res = await axios.patch(
-              `http://localhost:3000/api/v1/list/${auth.user.dni}`,
-              { covid: auth.espera.covid * -1 }
+              `http://localhost:3000/api/v1/list/${user.dni}`,
+              { covid: espera.covid * -1 }
             );
             auth.setearEspera(res.data);
-            turnoAutomatico(auth.user.dni);
+            turnoAutomatico(user.dni);
             fetchData();
           }
         })
@@ -41,8 +45,8 @@ const Campaign = () => {
           if (r) {
             setCovid(!covid);
             const res = await axios.patch(
-              `http://localhost:3000/api/v1/list/${auth.user.dni}`,
-              { covid: auth.espera.covid * -1 }
+              `http://localhost:3000/api/v1/list/${user.dni}`,
+              { covid: espera.covid * -1 }
             );
             auth.setearEspera(res.data);
           }
@@ -61,11 +65,10 @@ const Campaign = () => {
         }).then(async (r) => {
           if (r) {
             setGripe(!gripe);
-            await axios.patch(
-              `http://localhost:3000/api/v1/list/${auth.user.dni}`,
-              { gripe: true }
-            );
-            turnoAutomatico(auth.user.dni);
+            await axios.patch(`http://localhost:3000/api/v1/list/${user.dni}`, {
+              gripe: true,
+            });
+            turnoAutomatico(user.dni);
             fetchData();
           }
         })
@@ -77,10 +80,9 @@ const Campaign = () => {
         }).then(async (r) => {
           if (r) {
             setGripe(!gripe);
-            await axios.patch(
-              `http://localhost:3000/api/v1/list/${auth.user.dni}`,
-              { gripe: false }
-            );
+            await axios.patch(`http://localhost:3000/api/v1/list/${user.dni}`, {
+              gripe: false,
+            });
           }
         });
 
@@ -97,11 +99,10 @@ const Campaign = () => {
         }).then(async (r) => {
           if (r) {
             setFiebre(!fiebre);
-            await axios.patch(
-              `http://localhost:3000/api/v1/list/${auth.user.dni}`,
-              { fiebre: true }
-            );
-            turnoAutomatico(auth.user.dni);
+            await axios.patch(`http://localhost:3000/api/v1/list/${user.dni}`, {
+              fiebre: true,
+            });
+            turnoAutomatico(user.dni);
             fetchData();
           }
         })
@@ -113,10 +114,9 @@ const Campaign = () => {
         }).then(async (r) => {
           if (r) {
             setFiebre(!fiebre);
-            await axios.patch(
-              `http://localhost:3000/api/v1/list/${auth.user.dni}`,
-              { fiebre: false }
-            );
+            await axios.patch(`http://localhost:3000/api/v1/list/${user.dni}`, {
+              fiebre: false,
+            });
           }
         });
     fetchData();
@@ -134,12 +134,12 @@ const Campaign = () => {
       },
     };
     const { data } = await axios(
-      `http://localhost:3000/api/v1/list/${auth.user.dni}`,
+      `http://localhost:3000/api/v1/list/${user.dni}`,
       options
     );
     await auth.setearEspera(data);
     const dataTurn = await axios(
-      `http://localhost:3000/api/v1/turns/${auth.user.dni}`,
+      `http://localhost:3000/api/v1/turns/${user.dni}`,
       options
     );
     await auth.setearTurno(dataTurn.data);

@@ -4,8 +4,11 @@ import axios from "axios";
 import { useAuth } from "../context/useAuth";
 import TurnToday from "@components/TurnToday";
 import "@styles/TurnVacunator.scss";
+import Cookies from "universal-cookie";
 
 const TurnVacunator = () => {
+  const cookie = new Cookies();
+  const user = cookie.get("user");
   const auth = useAuth();
   const [turnos, setTurnos] = useState([]);
 
@@ -14,12 +17,10 @@ const TurnVacunator = () => {
     const fecha = new Date().toISOString().slice(0, 10);
 
     const res = data
-      .filter((t) => t.vacunatorio === auth.user.vacunatorioTrabajo)
+      .filter((t) => t.vacunatorio === user.vacunatorioTrabajo)
       .filter((t) => t.presente === "activo")
       .filter((t) => t.fecha.slice(0, 10) === fecha);
     res.map((turno) => setTurnos((old) => [...old, turno]));
-    console.log(res);
-    console.log(turnos);
   };
 
   useEffect(() => {

@@ -13,17 +13,22 @@ userService.getUser = async (req, res) => {
     'Content-Type': 'application/json',
     'X-Api-Key': 'kTKtFQmwC01y0wdgE93Mn3bOhWYgt7Ty4KY3yZsU',
   };
-  try {
-    const response = await axios.post(
-      `${urlBase}/person/validate`,
-      JSON.stringify(data),
-      {
-        headers: headers,
-      }
-    );
-    const user = await User.findOne({ dni: response.data.numeroDocumento });
-    res.json(user);
-  } catch (error) {
+  const user = await User.findOne({ dni: req.params.dni });
+  if (user !== undefined) {
+    try {
+      const response = await axios.post(
+        `${urlBase}/person/validate`,
+        JSON.stringify(data),
+        {
+          headers: headers,
+        }
+      );
+      const user = await User.findOne({ dni: response.data.numeroDocumento });
+      res.json(user);
+    } catch (error) {
+      res.status(500).send('Los datos ingresados son incorrectos');
+    }
+  } else {
     res.status(500).send('El usuario no existe');
   }
 };
@@ -36,7 +41,7 @@ userService.getUsers = async (req, res) => {
 userService.createUser = async (req, res) => {
   const user = await User.find({ dni: Number(req.body.dni) });
   if (user.length !== 0) {
-    res.status(500).send('El DNI ya esta registrado');
+    res.status(500).send('El DNI ingresado esta actualmente registrado');
   } else {
     const data = {
       dni: req.body.dni,
@@ -69,7 +74,7 @@ userService.createUser = async (req, res) => {
       await newUser.save();
       res.json('Usuario creado');
     } catch (error) {
-      res.status(500).send('Los datos estan mal');
+      res.status(500).send('Los datos ingresados son incorrectos');
     }
   }
 };

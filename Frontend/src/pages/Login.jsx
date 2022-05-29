@@ -5,12 +5,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 import swal from "sweetalert";
 import axios from "axios";
+import Cookies from "universal-cookie";
 
 const Login = () => {
   const [dni, setDNI] = useState(null);
   const [tramite, setTramite] = useState(null);
   const [sexo, setSexo] = useState(null);
   const auth = useAuth();
+  const cookie = new Cookies();
+
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -20,21 +23,19 @@ const Login = () => {
       sexo,
     };
     try {
-      const response = await fetch(
+      const response = await axios.post(
         `http://localhost:3000/api/v1/users/${dni}`,
-        {
-          method: "POST", // or 'PUT'
-          body: JSON.stringify(data),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        data
       );
-      const usuario = await response.json();
+      const usuario = await response.data;
       await auth.login(usuario);
       navigate("/campaign");
     } catch (error) {
-      swal({ title: "Inicio de sesion fallido", icon: "error" });
+      swal({
+        title: "Inicio de sesion fallido",
+        text: error.request.response,
+        icon: "error",
+      });
     }
   };
 

@@ -3,11 +3,14 @@ import "@styles/Turns.scss";
 import TurnActive from "@components/TurnActive";
 import TurnLast from "@components/TurnLast";
 import { useAuth } from "../context/useAuth";
+import Cookies from "universal-cookie";
 
 const Turns = () => {
+  const cookie = new Cookies();
+  const turn = cookie.get("turno");
   const auth = useAuth();
-  const turnoActivo = auth.turn.filter((turn) => turn.presente === "activo");
-  const turnoPasado = auth.turn.filter((turn) => turn.presente !== "activo");
+  const turnoActivo = turn.filter((turno) => turno.presente === "activo");
+  const turnoPasado = turn.filter((turno) => turno.presente !== "activo");
 
   return (
     <div className="Turns">

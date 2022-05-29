@@ -1,12 +1,15 @@
 import React from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "@styles/Turn.scss";
 import axios from "axios";
 import swal from "sweetalert";
+import { useAuth } from "../context/useAuth";
+import Cookies from "universal-cookie";
 
 const TurnActive = ({ turno }) => {
-  const navigate = useNavigate();
+  const auth = useAuth();
+  const cookie = new Cookies();
+  const user = cookie.get("user");
+
   const elegirVacunatorio = () => {
     switch (turno.vacunatorio) {
       case 1:
@@ -27,6 +30,11 @@ const TurnActive = ({ turno }) => {
     }).then(async (r) => {
       if (r) {
         await axios.delete(`http://localhost:3000/api/v1/turns/${turno._id}`);
+        const dataTurn = await axios(
+          `http://localhost:3000/api/v1/turns/${user.dni}`
+        );
+        await auth.setearTurno(dataTurn.data);
+        location.reload();
       }
     });
   };
@@ -42,6 +50,11 @@ const TurnActive = ({ turno }) => {
         await axios.patch(`http://localhost:3000/api/v1/turns/${turno._id}`, {
           fecha: 15,
         });
+        const dataTurn = await axios(
+          `http://localhost:3000/api/v1/turns/${user.dni}`
+        );
+        await auth.setearTurno(dataTurn.data);
+        location.reload();
       }
     });
   };
@@ -49,30 +62,34 @@ const TurnActive = ({ turno }) => {
   return (
     <div className="Turn-container">
       <table className="table-container">
-        <tr className="Turn-titulo">
-          <th>Marca</th>
-          <th>Dosis</th>
-          <th>Fecha</th>
-          <th>Vacunatorio</th>
-          <th>Posponer</th>
-          {/* <th>Cancelar</th> */}
-        </tr>
-        <tr>
-          <th>{turno.marca}</th>
-          <th>{turno.dosis === 0 ? "-" : turno.dosis}</th>
-          <th>{turno.fecha.slice(0, -14)}</th>
-          <th>{elegirVacunatorio()}</th>
-          <th>
-            <button className="posponer" onClick={() => posponerTurno()}>
-              ◷
-            </button>
-          </th>
-          {/* <th>
-            <button className="cancelar" onClick={() => cancelarTurno()}>
-              X
-            </button>
-          </th> */}
-        </tr>
+        <thead>
+          <tr className="Turn-titulo">
+            <th>Marca</th>
+            <th>Dosis</th>
+            <th>Fecha</th>
+            <th>Vacunatorio</th>
+            <th>Posponer</th>
+            <th>Cancelar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>{turno.marca}</th>
+            <th>{turno.dosis === 0 ? "-" : turno.dosis}</th>
+            <th>{turno.fecha.slice(0, -14)}</th>
+            <th>{elegirVacunatorio()}</th>
+            <th>
+              <button className="posponer" onClick={() => posponerTurno()}>
+                ◷
+              </button>
+            </th>
+            <th>
+              <button className="cancelar" onClick={() => cancelarTurno()}>
+                X
+              </button>
+            </th>
+          </tr>
+        </tbody>
       </table>
     </div>
   );

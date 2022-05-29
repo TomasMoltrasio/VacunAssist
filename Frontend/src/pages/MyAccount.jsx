@@ -5,9 +5,15 @@ import { useAuth } from "../context/useAuth";
 import { useEffect } from "react";
 import axios from "axios";
 import swal from "sweetalert";
+import Cookies from "universal-cookie";
 
 const MyAccount = () => {
+  const cookie = new Cookies();
+  const user = cookie.get("user");
+  const espera = cookie.get("espera");
+
   const auth = useAuth();
+  const [dis, setDis] = useState(false);
   const [email, setEmail] = useState(false);
   const [covid, setCovid] = useState(false);
   const [mod, setMod] = useState(false);
@@ -15,40 +21,45 @@ const MyAccount = () => {
 
   const handleToggle = (e) => {
     e.preventDefault();
-    swal({
-      title: "Editar email",
-      text: "¿Estas seguro de que deseas modificar tu email?",
-      icon: "info",
-      buttons: ["NO", "SI"],
-    }).then(async (r) => {
-      if (r) {
-        setEmail(auth.user.email);
-        if (validarEmail(email) === 1) {
-          await axios.patch(
-            `http://localhost:3000/api/v1/users/${auth.user.dni}`,
-            {
-              email: email,
-            }
-          );
-          swal({
-            title: "Datos actualizados",
-            text: "Los datos han sido actualizados con exito",
-            icon: "success",
-          });
-        } else {
-          swal({
-            title: "Email invalido",
-            text: "El email ingresado no es valido",
-            icon: "error",
-          });
+    if (!dis) {
+      setDis(true);
+    } else {
+      setDis(false);
+      swal({
+        title: "Editar email",
+        text: "¿Estas seguro de que deseas modificar tu email?",
+        icon: "info",
+        buttons: ["NO", "SI"],
+      }).then(async (r) => {
+        if (r) {
+          setEmail(user.email);
+          if (validarEmail(email) === 1) {
+            await axios.patch(
+              `http://localhost:3000/api/v1/users/${user.dni}`,
+              {
+                email: email,
+              }
+            );
+            swal({
+              title: "Datos actualizados",
+              text: "Los datos han sido actualizados con exito",
+              icon: "success",
+            });
+          } else {
+            swal({
+              title: "Email invalido",
+              text: "El email ingresado no es valido",
+              icon: "error",
+            });
+          }
         }
-      }
-    });
+      });
+    }
   };
 
   const fetchData = () => {
-    setEmail(auth.user.email);
-    setCovid(auth.espera.covid);
+    setEmail(user.email);
+    setCovid(espera.covid);
   };
 
   useEffect(() => {
@@ -76,7 +87,7 @@ const MyAccount = () => {
       buttons: ["NO", "SI"],
     }).then(async (r) => {
       if (r) {
-        await fetch(`http://localhost:3000/api/v1/turns/${auth.user.dni}`, {
+        await fetch(`http://localhost:3000/api/v1/turns/${user.dni}`, {
           method: "POST", // or 'PUT'
           body: JSON.stringify({
             marca: "Covid",
@@ -88,14 +99,14 @@ const MyAccount = () => {
           },
         });
         const res = await axios.patch(
-          `http://localhost:3000/api/v1/list/${auth.user.dni}`,
+          `http://localhost:3000/api/v1/list/${user.dni}`,
           {
             covid: covid,
           }
         );
         auth.setearEspera(res.data);
         const { data } = await axios.get(
-          `http://localhost:3000/api/v1/turns/${auth.user.dni}`
+          `http://localhost:3000/api/v1/turns/${user.dni}`
         );
         const turnoFiltro = data
           .filter((turno) => turno.marca === "Covid")
@@ -131,14 +142,15 @@ const MyAccount = () => {
               <input
                 type="email"
                 className="value"
-                placeholder={email}
+                defaultValue={user.email}
                 onChange={(e) => setEmail(e.target.value)}
+                disabled={!dis}
               ></input>
               <button
                 className="secondary-button login-button edit-button"
                 onClick={handleToggle}
               >
-                Editar
+                {!dis ? "Editar" : "OK"}
               </button>
             </div>
             <span className="spanDosis">

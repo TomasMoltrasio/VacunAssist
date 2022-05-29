@@ -55,27 +55,18 @@ const CreateAccount = () => {
       rol: "3",
     };
     try {
-      const response = await fetch("http://localhost:3000/api/v1/users", {
-        method: "POST", // or 'PUT'
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const usuario = await response.json();
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/users",
+        data
+      );
+      const usuario = await response.data;
       await auth.login(usuario);
 
       await fetch("http://localhost:3000/api/v1/list", {
-        method: "POST", // or 'PUT'
-        body: JSON.stringify({
-          dni: dni,
-          riesgo: riesgo,
-          vacunatorio: vacunatorio,
-          covid: (dosis + 1) * -1,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
+        dni: dni,
+        riesgo: riesgo,
+        vacunatorio: vacunatorio,
+        covid: (dosis + 1) * -1,
       });
       covid
         ? await fetch(`http://localhost:3000/api/v1/turns/${dni}`, {
@@ -122,6 +113,7 @@ const CreateAccount = () => {
     } catch (error) {
       swal({
         title: "Registro fallido",
+        text: error.request.response,
         icon: "error",
       });
     }
