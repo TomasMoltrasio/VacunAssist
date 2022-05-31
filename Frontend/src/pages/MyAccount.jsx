@@ -15,7 +15,7 @@ const MyAccount = () => {
   const auth = useAuth();
   const [dis, setDis] = useState(false);
   const [email, setEmail] = useState(false);
-  const [covid, setCovid] = useState(false);
+  const [covid, setCovid] = useState(espera.covid);
   const [mod, setMod] = useState(false);
   const [startdateCovid, setStartDateCovid] = useState(new Date());
 
@@ -34,12 +34,13 @@ const MyAccount = () => {
         if (r) {
           setEmail(user.email);
           if (validarEmail(email) === 1) {
-            await axios.patch(
+            const res = await axios.patch(
               `http://localhost:3000/api/v1/users/${user.dni}`,
               {
                 email: email,
               }
             );
+            auth.login(res.data);
             swal({
               title: "Datos actualizados",
               text: "Los datos han sido actualizados con exito",
@@ -67,7 +68,6 @@ const MyAccount = () => {
   }, []);
 
   function validarEmail(valor) {
-    console.log(valor);
     const expReg =
       /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
     const esValido = expReg.test(valor);
@@ -91,7 +91,7 @@ const MyAccount = () => {
           method: "POST", // or 'PUT'
           body: JSON.stringify({
             marca: "Covid",
-            dosis: covid - 1,
+            dosis: covid,
             fecha: Date.parse(startdateCovid),
           }),
           headers: {
@@ -101,7 +101,7 @@ const MyAccount = () => {
         const res = await axios.patch(
           `http://localhost:3000/api/v1/list/${user.dni}`,
           {
-            covid: covid,
+            covid: covid + 1,
           }
         );
         auth.setearEspera(res.data);
@@ -165,12 +165,11 @@ const MyAccount = () => {
                 name="decision"
                 defaultValue="1"
                 id="primera"
-                disabled={covid > 2}
+                disabled={Math.abs(espera.covid) > 1}
                 onChange={() => {
-                  setCovid(2);
+                  setCovid(1);
                   setMod(true);
                 }}
-                checked={covid === 2}
               />
               <label className="labelDecision activo" htmlFor="primera">
                 1°
@@ -181,12 +180,11 @@ const MyAccount = () => {
                 name="decision"
                 defaultValue="2"
                 id="segunda"
-                disabled={covid > 3}
+                disabled={Math.abs(espera.covid) > 2}
                 onChange={() => {
-                  setCovid(3);
+                  setCovid(2);
                   setMod(true);
                 }}
-                checked={covid === 3}
               />
               <label className="labelDecision" htmlFor="segunda">
                 2°
@@ -197,12 +195,11 @@ const MyAccount = () => {
                 name="decision"
                 defaultValue="3"
                 id="tercera"
-                disabled={covid > 4}
+                disabled={Math.abs(espera.covid) > 3}
                 onChange={() => {
-                  setCovid(4);
+                  setCovid(3);
                   setMod(true);
                 }}
-                checked={covid === 4}
               />
               <label className="labelDecision" htmlFor="tercera">
                 3°

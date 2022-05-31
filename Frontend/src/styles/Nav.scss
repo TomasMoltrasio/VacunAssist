@@ -78,10 +78,12 @@ nav {
 	color: var(--very-light-pink);
 	font-size: var(--lg);
 	margin-right: 12px;
+	cursor: default;
 }
 .navbar-shopping-cart {
 	position: relative;
 	font-size: 20px;
+	cursor: pointer;
 }
 .navbar-shopping-cart div {
 	width: 16px;
@@ -99,11 +101,46 @@ nav {
     
 }
 
-.cerrar-sesion {
-	color: var(--very-light-pink);
-	font-size: 30px;
-	margin-left: 35px;
+
+
+.menu-container {
+	display: flex;
+flex-direction: column;
+margin-left: 50px;
+background-color: var(--very-light-pink);
+opacity: 50%;
+border: 2px solid var(--white);
+border-radius: 15px;
 }
+.menu-container ul {
+	display: flex;
+	flex-direction: column;
+	place-content: space-around;
+	padding: 5px;
+}
+.menu-container ul li {
+	display: flex;
+	flex-direction: row;
+	place-content: center;
+}
+
+.editar {
+	margin-right: 5px;
+	font-size: 17px;
+}
+.cerrar-sesion {
+	margin-right: 3px;
+	font-size: 19px;
+
+}
+
+li b {
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+}
+
+
 
 @media (max-width: 640px) {
 	.menu {

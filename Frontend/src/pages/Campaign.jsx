@@ -167,10 +167,13 @@ const Campaign = () => {
 
   return (
     <div className="checkout">
+      <div className="bg-2">
+        <h1 className="t-stroke-shadow">CAMPAÑAS DE VACUNACION</h1>
+      </div>
       <div className="checkout-items">
         <div className="card">
           <div className="card-content">
-            <h1>Campaña de vacunacion COVID 19</h1>
+            <h2>COVID 19</h2>
             <button
               className="btn-inscripcion"
               onClick={btnCovid}
@@ -182,7 +185,7 @@ const Campaign = () => {
         </div>
         <div className="card">
           <div className="card-content">
-            <h1>Campaña de vacunacion Gripe A</h1>
+            <h2>Gripe A</h2>
             <button className="btn-inscripcion" onClick={btnGripe}>
               {gripe ? "Darme de baja" : "Inscribirme"}
             </button>
@@ -190,7 +193,7 @@ const Campaign = () => {
         </div>
         <div className="card">
           <div className="card-content">
-            <h1>Campaña de vacunacion Fiebre amarilla</h1>
+            <h2 className="fiebre">Fiebre amarilla</h2>
             <button
               className="btn-inscripcion"
               onClick={btnFiebre}

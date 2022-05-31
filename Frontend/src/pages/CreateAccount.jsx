@@ -62,7 +62,7 @@ const CreateAccount = () => {
       const usuario = await response.data;
       await auth.login(usuario);
 
-      await fetch("http://localhost:3000/api/v1/list", {
+      await axios.post("http://localhost:3000/api/v1/list", {
         dni: dni,
         riesgo: riesgo,
         vacunatorio: vacunatorio,

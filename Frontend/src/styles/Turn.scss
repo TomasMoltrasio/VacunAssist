@@ -12,22 +12,53 @@ h1{
     margin: 5px;
 }
 
+.table-container th {
+    text-align: center;
+    width: 10px;
+}
+
+
+
+.table-container td {
+    text-align: center;
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
+}
+
 
 .Turn-titulo{
     font-size: 25px;
-    color: var(--white);
+    color: var(--very-light-pink);
+    text-shadow: 1px 1px 1px var(--white);
     
 }
+
+
 
 .boxPresente{
     display: none;
 }
 
 .posponer {
-    background-color: var(--white);
-    border: 1px solid var(--very-light-pink);
+    background-color: transparent;
+    color: var(--very-light-pink);
+    font-size: 25px;
+    cursor:pointer;
 }
 
 .cancelar {
-    background-color: red;
+    color: red;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.aplicada {
+    font-size: 25px;
+    color: green;
+}
+
+.falto {
+    font-size: 25px;
+    color: red;
 }

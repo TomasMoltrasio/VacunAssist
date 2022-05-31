@@ -9,13 +9,9 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  // const [user, setUser] = useState(null);
-  // const [espera, setEspera] = useState(null);
-  // const [turn, setTurn] = useState(null);
   const cookie = new Cookies();
 
   const login = (user) => {
-    // setUser(user);
     cookie.set("user", user, { path: "/" });
   };
 
@@ -26,12 +22,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   const setearEspera = (espera) => {
-    // setEspera(espera);
     cookie.set("espera", espera, { path: "/" });
   };
 
   const setearTurno = (turno) => {
-    // setTurn(turno);
     cookie.set("turno", turno, { path: "/" });
   };
 

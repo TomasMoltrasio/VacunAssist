@@ -4,6 +4,8 @@ import axios from "axios";
 import swal from "sweetalert";
 import { useAuth } from "../context/useAuth";
 import Cookies from "universal-cookie";
+import { ImCancelCircle } from "react-icons/im";
+import { MdUpdate } from "react-icons/md";
 
 const TurnActive = ({ turno }) => {
   const auth = useAuth();
@@ -65,29 +67,38 @@ const TurnActive = ({ turno }) => {
         <thead>
           <tr className="Turn-titulo">
             <th>Marca</th>
+            <th></th>
             <th>Dosis</th>
+            <th></th>
             <th>Fecha</th>
+            <th></th>
             <th>Vacunatorio</th>
+            <th></th>
             <th>Posponer</th>
+            <th></th>
             <th>Cancelar</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <th>{turno.marca}</th>
-            <th>{turno.dosis === 0 ? "-" : turno.dosis}</th>
-            <th>{turno.fecha.slice(0, -14)}</th>
-            <th>{elegirVacunatorio()}</th>
-            <th>
-              <button className="posponer" onClick={() => posponerTurno()}>
-                ◷
-              </button>
-            </th>
-            <th>
-              <button className="cancelar" onClick={() => cancelarTurno()}>
-                X
-              </button>
-            </th>
+            <td>{turno.marca}</td>
+            <td></td>
+            <td>{turno.dosis === 0 ? "-" : turno.dosis}</td>
+            <td></td>
+            <td>{turno.fecha.slice(0, -14)}</td>
+            <td></td>
+            <td>{elegirVacunatorio()}</td>
+            <td></td>
+            <td>
+              <MdUpdate className="posponer" onClick={() => posponerTurno()} />
+            </td>
+            <td></td>
+            <td>
+              <ImCancelCircle
+                className="cancelar"
+                onClick={() => cancelarTurno()}
+              />
+            </td>
           </tr>
         </tbody>
       </table>

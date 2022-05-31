@@ -3,14 +3,16 @@ import "@styles/Nav.scss";
 import logoMain from "@logos/Logo_VacunAssist.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
+import { useState } from "react";
 import Cookies from "universal-cookie";
-import { FaShareSquare } from "react-icons/fa";
-import swal from "sweetalert";
+import { FaUserEdit } from "react-icons/fa";
+import { MdOutlineLogout } from "react-icons/md";
 
 const Nav = () => {
   const cookie = new Cookies();
   const user = cookie.get("user");
   const auth = useAuth();
+  const [menu, setMenu] = useState(false);
   const navigate = useNavigate();
   const handle = () => {
     switch (user.rol) {
@@ -59,22 +61,30 @@ const Nav = () => {
               Turnos vacunador
             </Link>
           ) : null}
-          <Link to="/account" className="Link">
-            Editar perfil
-          </Link>
         </ul>
       </div>
       <div className="navbar-right">
         <ul>
           <li className="navbar-email">{`${handle()}`}</li>
-          <li className="navbar-shopping-cart">{`${user.nombre} ${user.apellido}`}</li>
+          <li
+            className="navbar-shopping-cart"
+            onClick={() => setMenu(!menu)}
+          >{`${user.nombre} ${user.apellido}`}</li>
+          {menu ? (
+            <div className="menu-container">
+              <ul>
+                <li>
+                  <FaUserEdit className="editar"></FaUserEdit>
+                  <b onClick={() => navigate("/account")}>Mis datos</b>
+                </li>
+                <li>
+                  <MdOutlineLogout className="cerrar-sesion"></MdOutlineLogout>
+                  <b onClick={() => cerrarSesion()}>Cerrar sesion</b>
+                </li>
+              </ul>
+            </div>
+          ) : null}
         </ul>
-        <FaShareSquare
-          className="cerrar-sesion"
-          onClick={() => {
-            cerrarSesion();
-          }}
-        />
       </div>
     </nav>
   );

@@ -1,7 +1,7 @@
 @import 'vars';
 
 
-.checkout{
+.checkout {
     margin: 0 auto;
     width: 1400px;
 }
@@ -12,33 +12,70 @@
     flex-direction: row;
 }
 
-.card{
+.card {
     width: 100%;
     border-radius: 10px;
-    background-color: var(--hospital-green);
-    display: inline-flex; 
+    background: rgb(108,125,110);
+    background: linear-gradient(180deg, rgba(108,125,110,1) 0%, rgba(130,242,145,1) 2%, rgba(130,242,145,1) 98%, rgba(108,125,110,1) 100%); 
+    display: inline-flex;
     margin: 10px;
-    box-shadow: rgba(0, 0, 0, 0.295) 0px 0px 10px ;
+    box-shadow: rgba(0, 0, 0, 0.295) 0px 0px 10px;
     border: 3px solid var(--very-light-pink);
     text-align: center;
+    place-content: center;
+    height: 200px;
+    align-self: center;
+}
+
+.card h2 {
+    margin: 0px;
+    font-size: 40px;
 }
 
 
 
-.titulo-calendario{
+
+.t-stroke-shadow {
+    font-size: 70px;
+    color: var(--very-light-pink);
+    text-shadow: -3px 3px #ffffff, -3px -3px #ffffff, 3px -3px #ffffff, 3px 3px #f3f3f2, 6px 6px var(--hospital-green);
+}
+
+
+
+
+
+.titulo-calendario {
     margin-bottom: 9px;
 }
 
 .btn-inscripcion {
     text-decoration: none;
-	color: var(--very-light-pink);
-	border: 1px solid var(--very-light-pink);
-	padding: 15px 40px;
-	border-radius: 8px;
+    color: var(--very-light-pink);
+    border: 1px solid var(--very-light-pink);
+    padding: 15px 40px;
+    border-radius: 8px;
     background-color: var(--white);
     margin-top: 10%;
     font-size: large;
+    transition: all 0.4s ease-out;
 }
+
+.btn-inscripcion:hover {
+    background-color: transparent;
+    color: var(--white);
+    border-top: none;
+    border-bottom: none;
+    border-left: 4px solid var(--white);
+    border-right: 4px solid var(--white);
+    padding: 15px 80px;
+
+    box-shadow: 0px 0px 400px -101px var(--white) inset;
+    -webkit-box-shadow: 0px 0px 400px -101px var(--white) inset;
+    -moz-box-shadow: 0px 0px 400px -101px var(--white) inset;
+}
+
+
 
 .card-content :disabled {
     background-color: var(--very-light-pink);
@@ -46,20 +83,24 @@
     color: var(--white);
 }
 
-.btn-confirmar-gripe{
+.btn-confirmar-gripe {
     text-decoration: none;
-	color: var(--very-light-pink);
-	border: 1px solid var(--very-light-pink);
-	padding: 2px 10px;
-	border-radius: 8px;
+    color: var(--very-light-pink);
+    border: 1px solid var(--very-light-pink);
+    padding: 2px 10px;
+    border-radius: 8px;
     background-color: var(--white);
     margin-top: 5px;
     font-size: small;
 }
 
-.card-content{
-    color:var(--white);
-    height: 350px;
+.card-content {
+    color: var(--white);
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    place-content: center;
+    align-self: center;
 }
 
 .fecha-container-covid {
@@ -69,22 +110,22 @@
 .formPersonalCampaign {
     display: flex;
     align-items: center;
-  justify-content: center;
-  margin-bottom: 10px;
+    justify-content: center;
+    margin-bottom: 10px;
 }
 
-.formPersonalCampaign .labelDecision{
-	padding: 6px 30px;
-	border-radius: 20px;
-	border: 2px solid #ccc;
-  }
-  
-  .boxDecision:checked + label{
-	background: var(--white);
-	color: var(--very-light-pink);
-	border: 2px solid var(--hospital-green);
-  }
-  
-  .boxDecision{
-	display: none;
-  }
+.formPersonalCampaign .labelDecision {
+    padding: 6px 30px;
+    border-radius: 20px;
+    border: 2px solid #ccc;
+}
+
+.boxDecision:checked+label {
+    background: var(--white);
+    color: var(--very-light-pink);
+    border: 2px solid var(--hospital-green);
+}
+
+.boxDecision {
+    display: none;
+}

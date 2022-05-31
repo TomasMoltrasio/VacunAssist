@@ -90,7 +90,8 @@ userService.updateUser = async (req, res) => {
     rol: req.body.rol || user[0].rol,
   };
   await User.findOneAndUpdate({ dni: Number(req.params.id) }, newUser);
-  res.json(user);
+  const resUser = await User.findOne({ dni: Number(req.params.id) });
+  res.json(resUser);
 };
 
 userService.deleteUser = async (req, res) => {

@@ -114,12 +114,48 @@ turnService.createTurnLast = async (req, res) => {
 
 turnService.getTurn = async (req, res) => {
   const turnos = await Turn.find({ dni: Number(req.params.id) });
-  res.json(turnos);
+  const newTurnos = [];
+  turnos.map((turno) => {
+    newTurnos.push(
+      new Turn({
+        _id: turno._id,
+        dni: turno.dni,
+        marca: turno.marca,
+        dosis: turno.dosis,
+        fecha: turno.fecha,
+        lote: turno.lote,
+        vacunatorio: turno.vacunatorio,
+        presente:
+          turno.presente === 'activo' && turno.fecha < new Date()
+            ? 'falto'
+            : turno.presente,
+      })
+    );
+  });
+  res.json(newTurnos);
 };
 
 turnService.getTurns = async (req, res) => {
   const turnos = await Turn.find();
-  res.json(turnos);
+  const newTurnos = [];
+  turnos.map((turno) => {
+    newTurnos.push(
+      new Turn({
+        _id: turno._id,
+        dni: turno.dni,
+        marca: turno.marca,
+        dosis: turno.dosis,
+        fecha: turno.fecha,
+        lote: turno.lote,
+        vacunatorio: turno.vacunatorio,
+        presente:
+          turno.presente === 'activo' && turno.fecha < new Date()
+            ? 'falto'
+            : turno.presente,
+      })
+    );
+  });
+  res.json(newTurnos);
 };
 
 turnService.updateTurn = async (req, res) => {
