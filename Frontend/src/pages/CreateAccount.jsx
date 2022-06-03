@@ -199,6 +199,7 @@ const CreateAccount = () => {
             Elegir vacunatorio
           </label>
           <select name="vacunatorio" onChange={handleVacunatorio}>
+            <option value="" selected></option>
             <option value="1">Hospital 9 de Julio</option>
             <option value="2">Corralón municipal</option>
             <option value="3">Polideportivo</option>

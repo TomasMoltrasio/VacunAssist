@@ -41,6 +41,8 @@ const TurnToday = ({ turno }) => {
           swal({
             title: "Turno marcado con exito",
             icon: "success",
+          }).then(() => {
+            location.reload();
           });
         }
       });

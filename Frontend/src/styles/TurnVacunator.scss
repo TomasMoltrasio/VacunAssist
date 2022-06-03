@@ -1,13 +1,113 @@
 .TurnVacunator {
 	width: 100%;
 	height: 100vh;
-	display: flex;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
 	place-items: center;
 	justify-content: space-around;
 	align-items: flex-start;
 }
 .TurnVacunator-container {
+	grid-column: 2 / 3;	
 	display: flex;
 	flex-direction: column;
+	
+}
+
+.busqueda-container input:focus {
+	border-top: 3px solid var(--hospital-green);
+	border-bottom: 3px solid var(--hospital-green);
+	border-left: none;
+	border-right: none;
+}
+
+.busqueda-container {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	margin-bottom: 30px;
+}
+
+.inputBusqueda {
+	border-top: 3px solid var(--very-light-pink);
+	border-bottom: 3px solid var(--very-light-pink);
+	border-left: none;
+	border-right: none;
+	position: relative;
+	width: 50%;
+	height: 25px;
+	border-radius: 5px;
+	outline: none;
+}
+
+
+
+.logoBusqueda {
+	font-size: 20px;
+	margin-left: 5px;
+	position: absolute;
+	margin-left: 250px;
+	color: var(--very-light-pink);
+}
+
+
+
+.no-result {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	
+}
+
+.form-vacunado-sinturno {
+	display: flex;
+	flex-direction: column;
+	width: 80%;
+	height: 100%;
+	margin: 15px;
+	align-items: center;
+}
+
+.form-vacunado-sinturno label {
+	font-size: 15px;
+	margin-bottom: 5px;
+	text-align: center;
+}
+
+.form-vacunado-sinturno input {
+	border-radius: 5px;
+	margin-bottom: 5px;
+}
+
+.form-vacunado-sinturno input:focus{
+	outline: 3px solid var(--hospital-green);
+}
+
+.form-vacunado-sinturno select {
+	border-radius: 5px;
+	margin-bottom: 5px;
+	
+}
+
+.form-vacunado-sinturno select:disabled {
+background-color: var(--very-light-pink);
+outline: 1px solid var(--hospital-green);
+	
+}
+
+.form-vacunado-sinturno select:focus {
+	outline: 3px solid var(--hospital-green);
+}
+
+.form-vacunado-sinturno button {
+	border-radius: 5px;
+	margin-top: 5px;
+	width: 30%;
+	height: 30px;
+	background-color: var(--hospital-green);
+	color: var(--very-light-pink);
 	
 }

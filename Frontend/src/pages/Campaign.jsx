@@ -155,6 +155,9 @@ const Campaign = () => {
       .filter((turn2) => turn2.presente === "aplicada");
     if (data.edad > 60 || res.length !== 0) {
       setDisFiebre(true);
+      axios.patch(`http://localhost:3000/api/v1/list/${user.dni}`, {
+        fiebre: false,
+      });
     }
     if (data.edad < 18) {
       setDisCovid(true);

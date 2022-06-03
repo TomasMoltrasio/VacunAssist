@@ -115,7 +115,12 @@ turnService.createTurnLast = async (req, res) => {
 turnService.getTurn = async (req, res) => {
   const turnos = await Turn.find({ dni: Number(req.params.id) });
   const newTurnos = [];
+  const today = new Date();
+  const dayInMillis = 24 * 3600000;
+  const tomorrow = Math.floor(today.getTime() / dayInMillis);
   turnos.map((turno) => {
+    let fecha = new Date(turno.fecha);
+    let hoy = Math.floor(fecha.getTime() / dayInMillis);
     newTurnos.push(
       new Turn({
         _id: turno._id,
@@ -126,7 +131,7 @@ turnService.getTurn = async (req, res) => {
         lote: turno.lote,
         vacunatorio: turno.vacunatorio,
         presente:
-          turno.presente === 'activo' && turno.fecha < new Date()
+          turno.presente == 'activo' && hoy < tomorrow
             ? 'falto'
             : turno.presente,
       })
@@ -138,7 +143,12 @@ turnService.getTurn = async (req, res) => {
 turnService.getTurns = async (req, res) => {
   const turnos = await Turn.find();
   const newTurnos = [];
+  const today = new Date();
+  const dayInMillis = 24 * 3600000;
+  const tomorrow = Math.floor(today.getTime() / dayInMillis);
   turnos.map((turno) => {
+    let fecha = new Date(turno.fecha);
+    let hoy = Math.floor(fecha.getTime() / dayInMillis);
     newTurnos.push(
       new Turn({
         _id: turno._id,
@@ -149,7 +159,7 @@ turnService.getTurns = async (req, res) => {
         lote: turno.lote,
         vacunatorio: turno.vacunatorio,
         presente:
-          turno.presente === 'activo' && turno.fecha < new Date()
+          turno.presente == 'activo' && hoy < tomorrow
             ? 'falto'
             : turno.presente,
       })
