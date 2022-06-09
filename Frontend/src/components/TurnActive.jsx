@@ -61,12 +61,19 @@ const TurnActive = ({ turno }) => {
     });
   };
 
+  const convertirFecha = (fecha) => {
+    const dia = fecha.split("T")[0].split("-")[2];
+    const mes = fecha.split("-")[1];
+    const anio = fecha.split("-")[0];
+    return `${dia}/${mes}/${anio}`;
+  };
+
   return (
     <div className="Turn-container">
       <table className="table-container">
         <thead>
           <tr className="Turn-titulo">
-            <th>Marca</th>
+            <th>Vacuna</th>
             <th></th>
             <th>Dosis</th>
             <th></th>
@@ -85,7 +92,7 @@ const TurnActive = ({ turno }) => {
             <td></td>
             <td>{turno.dosis === 0 ? "-" : turno.dosis}</td>
             <td></td>
-            <td>{turno.fecha.slice(0, -14)}</td>
+            <td>{convertirFecha(turno.fecha)}</td>
             <td></td>
             <td>{elegirVacunatorio()}</td>
             <td></td>

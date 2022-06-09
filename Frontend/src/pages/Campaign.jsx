@@ -147,7 +147,7 @@ const Campaign = () => {
   };
 
   const disabledData = async (data, dataTurn) => {
-    data.covid < 0 ? setCovid(false) : setCovid(true);
+    data.covid <= 0 ? setCovid(false) : setCovid(true);
     data.gripe ? setGripe(true) : setGripe(false);
     data.fiebre ? setFiebre(true) : setFiebre(false);
     const res = dataTurn
@@ -184,6 +184,9 @@ const Campaign = () => {
             >
               {covid ? "Darme de baja" : "Inscribirme"}
             </button>
+            {disCovid ? (
+              <p>La vacuna del covid no se aplica a menores de 18 años</p>
+            ) : null}
           </div>
         </div>
         <div className="card">
@@ -204,6 +207,11 @@ const Campaign = () => {
             >
               {fiebre ? "Darme de baja" : "Inscribirme"}
             </button>
+            {disFiebre ? (
+              <p>
+                La vacuna de la fiebre se da una sola vez y a menores de 60 años
+              </p>
+            ) : null}
           </div>
         </div>
       </div>

@@ -61,7 +61,7 @@
     transition: all 0.4s ease-out;
 }
 
-.btn-inscripcion:hover {
+.btn-inscripcion:hover:enabled {
     background-color: transparent;
     color: var(--white);
     border-top: none;
@@ -78,10 +78,7 @@
 
 
 .card-content :disabled {
-    background-color: var(--very-light-pink);
-    border: 1px solid var(--white);
-    color: var(--very-light-pink);
-    
+    display: none;
 }
 
 .btn-confirmar-gripe {
@@ -102,6 +99,12 @@
     flex-direction: column;
     place-content: center;
     align-self: center;
+}
+
+.card-content p {
+
+    font-size: 20px;
+    color: var(--very-light-pink);
 }
 
 .fecha-container-covid {

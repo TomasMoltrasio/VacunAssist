@@ -19,7 +19,7 @@ listService.createEspera = async (req, res) => {
   }
   const newList = new List({
     dni: Number(req.body.dni),
-    covid: Number(req.body.covid) || 0,
+    covid: Number(req.body.covid) || -1,
     gripe: req.body.gripe || false,
     fiebre: req.body.fiebre || false,
     edad: Number(getEdad()),

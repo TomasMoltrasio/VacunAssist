@@ -3,15 +3,19 @@ import "@styles/Turn.scss";
 import { useState } from "react";
 import axios from "axios";
 import swal from "sweetalert";
+import Cookies from "universal-cookie";
 
 const TurnToday = ({ turno }) => {
   const [lote, setLote] = useState(null);
+  const [marca, setMarca] = useState(null);
+  const cookie = new Cookies();
+  const user = cookie.get("user");
 
   const confirmarPresente = async (e) => {
-    if (lote === null) {
+    if (lote === null || marca === null) {
       swal({
         title: "Error",
-        text: "Debe ingresar el numero de lote",
+        text: "Debe ingresar el numero de lote y marca",
         icon: "error",
       });
     } else {
@@ -23,8 +27,11 @@ const TurnToday = ({ turno }) => {
       }).then(async (r) => {
         if (r) {
           e.preventDefault();
+          let nombre = user.nombre + " " + user.apellido;
           await axios.patch(`http://localhost:3000/api/v1/turns/${turno._id}`, {
             lote: lote,
+            fabricante: marca,
+            vacunador: nombre,
             presente: "aplicada",
           });
           if (turno.dosis > 0) {
@@ -54,6 +61,7 @@ const TurnToday = ({ turno }) => {
       <table className="table-container">
         <tr className="Turn-titulo">
           <th>DNI</th>
+          <th>Vacuna</th>
           <th>Marca</th>
           <th>Dosis</th>
           <th>Lote</th>
@@ -62,6 +70,9 @@ const TurnToday = ({ turno }) => {
         <tr>
           <th>{turno.dni}</th>
           <th>{turno.marca}</th>
+          <th>
+            <input type="text" onChange={(e) => setMarca(e.target.value)} />
+          </th>
           <th>{turno.dosis === 0 ? "-" : turno.dosis}</th>
           <th>
             <input type="text" onChange={(e) => setLote(e.target.value)} />

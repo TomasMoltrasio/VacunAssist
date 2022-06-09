@@ -17,6 +17,8 @@ const TurnVacunator = () => {
   const [dni, setDni] = useState(0);
   const [lote, setLote] = useState("");
   const [dosis, setDosis] = useState(0);
+  const [mod, setMod] = useState(false);
+  const [nombre, setNombre] = useState("");
   const cookies = new Cookies();
   const user = cookies.get("user");
 
@@ -35,17 +37,22 @@ const TurnVacunator = () => {
 
   const filtrarTurnos = (e) => {
     setBusqueda(e.target.value);
-    const newRes = tablaTurnos.filter((t) => {
-      if (t.dni.toString().includes(e.target.value)) {
-        return t;
+    if (busqueda.length > 5) {
+      const newRes = tablaTurnos.filter((t) => {
+        if (t.dni.toString().includes(e.target.value)) {
+          return t;
+        }
+      });
+      if (newRes.length > 0) {
+        setBusquedaDni(false);
+        setTurnos(newRes);
+      } else {
+        setTurnos([]);
+        setBusquedaDni(true);
       }
-    });
-    if (newRes.length > 0) {
-      setBusquedaDni(false);
-      setTurnos(newRes);
     } else {
-      setTurnos([]);
-      setBusquedaDni(true);
+      setBusquedaDni(false);
+      setTurnos(tablaTurnos);
     }
   };
 
@@ -76,6 +83,7 @@ const TurnVacunator = () => {
             marca: marca,
             dosis: dosis,
             lote: lote,
+            vacunador: user.nombre + " " + user.apellido,
             presente: "aplicada",
             fecha: new Date().toISOString(),
           });
@@ -95,6 +103,29 @@ const TurnVacunator = () => {
     } else {
       setCovid(false);
       setDosis(0);
+    }
+  };
+
+  const verificarDni = async (e) => {
+    setDni(e.target.value);
+    if (e.target.value.length === 8) {
+      try {
+        const res = await axios.get(
+          `http://localhost:3000/api/v1/users/${e.target.value}`
+        );
+        if (res.data !== undefined) {
+          setMod(true);
+          setNombre(res.data.nombre + " " + res.data.apellido);
+          console.log(mod);
+          console.log(nombre);
+        }
+      } catch (error) {
+        setMod(true);
+        setNombre("DNI no registrado");
+      }
+    } else {
+      setNombre("");
+      setMod(false);
     }
   };
 
@@ -125,8 +156,16 @@ const TurnVacunator = () => {
               <input
                 type="text"
                 defaultValue={busqueda}
-                onChange={(e) => setDni(e.target.value)}
+                onChange={(e) => verificarDni(e)}
               />
+              {mod ? (
+                <input
+                  className="nombre-vacunado"
+                  type="text"
+                  value={nombre}
+                  disabled
+                />
+              ) : null}
               <label>Marca</label>
               <select
                 name="marca"

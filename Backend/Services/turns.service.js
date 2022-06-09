@@ -15,7 +15,9 @@ const generateCovid = async (list) => {
     turnCovid.length !== 0 &&
     (list[0].riesgo === true || list[0].edad > 60)
   ) {
-    let fecha = turnCovid[0].fecha.setDate(turnCovid[0].fecha.getDate() + 30);
+    let fecha = turnCovid[turnCovid.length - 1].fecha.setMonth(
+      turnCovid[turnCovid.length - 1].fecha.getMonth() + 3
+    );
     if (fecha - new Date().getTime() < 0) {
       return date.setDate(date.getDate() + 7);
     } else {
@@ -23,7 +25,11 @@ const generateCovid = async (list) => {
     }
   } else {
     if (list[0].riesgo === true || list[0].edad > 60) {
-      return date.setDate(date.getDate() + 7);
+      if (list[0].covid > 1) {
+        return date.setMonth(date.getMonth() + 3);
+      } else {
+        return date.setDate(date.getDate() + 7);
+      }
     } else {
       return 'error';
     }
@@ -44,14 +50,14 @@ const generateGripe = async (list) => {
   if (turnGripe.length !== 0) {
     let fecha = turnGripe[0].fecha.setDate(turnGripe[0].fecha.getDate() + 365);
     if (fecha - new Date().getTime() < 0) {
-      return date.setDate(date.getDate() + 180);
+      return date.setMonth(date.getMonth() + 6);
     } else {
       return new Date(fecha);
     }
   } else {
     return list[0].edad > 60
-      ? date.setDate(date.getDate() + 90)
-      : date.setDate(date.getDate() + 180);
+      ? date.setMonth(date.getMonth() + 3)
+      : date.setMonth(date.getMonth() + 6);
   }
 };
 
@@ -88,7 +94,9 @@ turnService.createTurn = async (req, res) => {
         dosis: turno.dosis || 0,
         fecha: turno.fecha,
         lote: req.body.lote || '',
+        fabricante: req.body.fabricante || '',
         vacunatorio: turno.vacunatorio,
+        vacunador: req.body.vacunador || '',
         presente: 'activo',
       }).save();
     });
@@ -103,10 +111,12 @@ turnService.createTurnLast = async (req, res) => {
     dni: Number(req.params.id),
     marca: req.body.marca,
     dosis: req.body.dosis || 0,
+    fabricante: req.body.fabricante || '',
     fecha: new Date(req.body.fecha) || new Date(),
     lote: req.body.lote,
     vacunatorio: req.body.vacunatorio || 4,
     presente: req.body.presente || 'aplicada',
+    vacunador: req.body.vacunador || '',
   });
   await newTurn.save();
   res.json('Turno creado');
@@ -129,7 +139,9 @@ turnService.getTurn = async (req, res) => {
         dosis: turno.dosis,
         fecha: turno.fecha,
         lote: turno.lote,
+        fabricante: turno.fabricante,
         vacunatorio: turno.vacunatorio,
+        vacunador: turno.vacunador,
         presente:
           turno.presente == 'activo' && hoy < tomorrow
             ? 'falto'
@@ -155,9 +167,11 @@ turnService.getTurns = async (req, res) => {
         dni: turno.dni,
         marca: turno.marca,
         dosis: turno.dosis,
+        fabricante: turno.fabricante,
         fecha: turno.fecha,
         lote: turno.lote,
         vacunatorio: turno.vacunatorio,
+        vacunador: turno.vacunador,
         presente:
           turno.presente == 'activo' && hoy < tomorrow
             ? 'falto'
@@ -178,6 +192,8 @@ turnService.updateTurn = async (req, res) => {
     fecha:
       turn.fecha.setDate(turn.fecha.getDate() + req.body.fecha) || turn.fecha,
     lote: req.body.lote || turn.lote,
+    fabricante: req.body.fabricante || turn.fabricante,
+    vacunador: req.body.vacunador || turn.vacunador,
     vacunatorio: turn.vacunatorio,
     presente: req.body.presente || turn.presente,
   });

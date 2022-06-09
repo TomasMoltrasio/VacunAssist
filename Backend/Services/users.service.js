@@ -3,7 +3,7 @@ const User = require('../models/Usuario');
 const urlBase = 'https://hhvur3txna.execute-api.sa-east-1.amazonaws.com/dev';
 const axios = require('axios');
 
-userService.getUser = async (req, res) => {
+userService.logIn = async (req, res) => {
   const data = {
     dni: req.params.id,
     tramite: req.body.tramite,
@@ -28,6 +28,15 @@ userService.getUser = async (req, res) => {
     } catch (error) {
       res.status(500).send('Los datos ingresados son incorrectos');
     }
+  } else {
+    res.status(500).send('El usuario no existe');
+  }
+};
+
+userService.getUser = async (req, res) => {
+  const user = await User.findOne({ dni: req.params.id });
+  if (user !== undefined) {
+    res.json(user);
   } else {
     res.status(500).send('El usuario no existe');
   }

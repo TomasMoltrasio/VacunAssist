@@ -1,6 +1,7 @@
 import React from "react";
 import "@styles/Turn.scss";
-import { BsCheck2Circle, BsCalendarXFill } from "react-icons/bs";
+import { BsCheck2Circle } from "react-icons/bs";
+import { TiCancel } from "react-icons/ti";
 
 const TurnLast = ({ turno }) => {
   const elegirVacunatorio = () => {
@@ -15,10 +16,20 @@ const TurnLast = ({ turno }) => {
         return "Otro";
     }
   };
+
+  const convertirFecha = (fecha) => {
+    const dia = fecha.split("T")[0].split("-")[2];
+    const mes = fecha.split("-")[1];
+    const anio = fecha.split("-")[0];
+    return `${dia}/${mes}/${anio}`;
+  };
+
   return (
     <div className="Turn-container">
       <table className="table-container">
         <tr className="Turn-titulo">
+          <th>Vacuna</th>
+          <th></th>
           <th>Marca</th>
           <th></th>
           <th>Dosis</th>
@@ -27,14 +38,16 @@ const TurnLast = ({ turno }) => {
           <th></th>
           <th>Vacunatorio</th>
           <th></th>
-          <th>Aplicada</th>
+          <th>Estado</th>
         </tr>
         <tr>
           <th>{turno.marca}</th>
           <th></th>
+          <th>{turno.fabricante}</th>
+          <th></th>
           <th>{turno.dosis === 0 ? "-" : turno.dosis}</th>
           <th></th>
-          <th>{turno.fecha.slice(0, -14)}</th>
+          <th>{convertirFecha(turno.fecha)}</th>
           <th></th>
           <th>{elegirVacunatorio()}</th>
           <th></th>
@@ -42,7 +55,7 @@ const TurnLast = ({ turno }) => {
             {turno.presente === "aplicada" ? (
               <BsCheck2Circle className="aplicada" />
             ) : (
-              <BsCalendarXFill className="falto" />
+              <TiCancel className="falto" />
             )}
           </th>
         </tr>
