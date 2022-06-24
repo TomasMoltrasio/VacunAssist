@@ -6,9 +6,6 @@ import { useEffect } from "react";
 import axios from "axios";
 import swal from "sweetalert";
 import Cookies from "universal-cookie";
-import jsPDF from "jspdf";
-import firma from "../assets/iconos/firma.png";
-import logobn from "../assets/logos/LogoBN.png";
 
 const MyAccount = () => {
   const cookie = new Cookies();
@@ -22,6 +19,7 @@ const MyAccount = () => {
   const [dosis, setDosis] = useState(espera.covid);
   const [gripe, setGripe] = useState(false);
   const [fiebre, setFiebre] = useState(false);
+  const [disFiebre, setDisFiebre] = useState(false);
   const [mod, setMod] = useState(false);
   const [riesgo, setRiesgo] = useState(espera.riesgo);
   const [startdateCovid, setStartDateCovid] = useState(new Date());
@@ -169,20 +167,23 @@ const MyAccount = () => {
       buttons: ["NO", "SI"],
     }).then(async (r) => {
       if (r) {
-        e.target.id === "noForm" ? setRiesgo(false) : setRiesgo(true);
+        setRiesgo(!riesgo);
         const res = await axios.patch(
           `http://localhost:3000/api/v1/users/${user.dni}`,
           {
-            riesgo: riesgo,
+            riesgo: !riesgo,
           }
         );
         auth.login(res.data);
         const { data } = await axios.patch(
           `http://localhost:3000/api/v1/list/${user.dni}`,
           {
-            riesgo: riesgo,
+            riesgo: !riesgo,
           }
         );
+        await axios.post("http://localhost:3000/api/v1/turns/", {
+          dni: user.dni,
+        });
         auth.setearEspera(data);
         swal({
           title: "Datos actualizados",
@@ -240,76 +241,6 @@ const MyAccount = () => {
     });
   };
 
-  const elegirVacunatorio = (vacunatorio) => {
-    switch (vacunatorio) {
-      case 1:
-        return "Hospital 9 de Julio";
-      case 2:
-        return "Corralón municipal";
-      case 3:
-        return "Polideportivo";
-      case 4:
-        return "Otro";
-    }
-  };
-
-  const generatePDF = () => {
-    const res = turnos
-      .filter((turno) => turno.marca === "Fiebre")
-      .filter((turno) => turno.presente === "aplicada")
-      .filter((turno) => turno.vacunatorio <= 3);
-    const doc = new jsPDF();
-    const width = doc.internal.pageSize.getWidth();
-    doc.setFillColor(255, 255, 0);
-    doc.setDrawColor(0, 0, 0);
-    doc.roundedRect(10, 10, 190, 110, 3, 3, "FD");
-    doc.setFontSize(30);
-    doc.setFillColor(255, 0, 0);
-    doc.text(width / 2, 25, "Certificado Fiebre Amarilla", "center");
-    doc.setFontSize(15);
-    doc.text(
-      width / 2,
-      50,
-      "Certificamos que " +
-        user.nombre +
-        " " +
-        user.apellido +
-        " con DNI " +
-        user.dni,
-      "center"
-    );
-    doc.text(
-      width / 2,
-      60,
-      "se ha aplicado la vacuna " +
-        res[0].fabricante +
-        " contra la fiebre amarilla con lote " +
-        res[0].lote,
-      "center"
-    );
-    doc.text(
-      width / 2,
-      70,
-      "el dia " +
-        res[0].fecha.split("T")[0].split("-")[2] +
-        "/" +
-        res[0].fecha.split("-")[1] +
-        "/" +
-        res[0].fecha.split("-")[0] +
-        " en el vacunatorio " +
-        elegirVacunatorio(res[0].vacunatorio),
-      "center"
-    );
-    doc.line(100, 110, 145, 110);
-    doc.setFontSize(8);
-    doc.text(width / 2, 115, `Dr. ${res[0].vacunador}`, "left");
-    doc.addImage(logobn, "PNG", 40, 93, 40, 23);
-    doc.setFont("courier", "bolditalic");
-    doc.setFontSize(10);
-    doc.text(width / 2, 105, `${res[0].vacunador}`, "left");
-    doc.save("certificado.pdf");
-  };
-
   return (
     <div className="MyAccount">
       <div className="MyAccount-container">
@@ -336,14 +267,6 @@ const MyAccount = () => {
             </div>
           </div>
         </form>
-        {turnos
-          .filter((turno) => turno.marca === "Fiebre")
-          .filter((turno) => turno.presente === "aplicada")
-          .filter((turno) => turno.vacunatorio <= 3).length > 0 && (
-          <button onClick={() => generatePDF()}>
-            Descargar certificado fiebre amarilla
-          </button>
-        )}
         <span className="spanEdad">
           <b>¿Padece alguna de las siguientes condiciones?</b>
         </span>
@@ -503,7 +426,13 @@ const MyAccount = () => {
                   onChange={() => {
                     setFiebre(false);
                   }}
-                  disabled={espera.edad > 60}
+                  disabled={
+                    espera.edad > 60 ||
+                    turnos
+                      .filter((turno) => turno.marca === "Fiebre")
+                      .filter((turno) => turno.presente === "aplicada").length >
+                      0
+                  }
                 />
                 <label className="labelDecision activo" htmlFor="noFiebre">
                   No
@@ -517,7 +446,13 @@ const MyAccount = () => {
                   onChange={() => {
                     setFiebre(true);
                   }}
-                  disabled={espera.edad > 60}
+                  disabled={
+                    espera.edad > 60 ||
+                    turnos
+                      .filter((turno) => turno.marca === "Fiebre")
+                      .filter((turno) => turno.presente === "aplicada").length >
+                      0
+                  }
                 />
                 <label className="labelDecision" htmlFor="siFiebre">
                   Si

@@ -43,7 +43,7 @@ listService.getEsperas = async (req, res) => {
 listService.updateEspera = async (req, res) => {
   const list = await List.find({ dni: Number(req.params.id) });
   const newList = {
-    riesgo: req.body.riesgo || list[0].riesgo,
+    riesgo: req.body.riesgo === null ? list[0].riesgo : req.body.riesgo,
     vacunatorio: Number(req.body.vacunatorio) || list[0].vacunatorio,
     covid: Number(req.body.covid) || list[0].covid,
     fiebre: req.body.fiebre === null ? list[0].fiebre : req.body.fiebre,

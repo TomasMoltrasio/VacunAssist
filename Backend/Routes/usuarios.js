@@ -6,6 +6,7 @@ const {
   updateUser,
   deleteUser,
   logIn,
+  getUserNoRegister,
 } = require('../Services/users.service');
 
 const router = Router();
@@ -18,5 +19,7 @@ router
   .post(logIn)
   .patch(updateUser)
   .delete(deleteUser);
+
+router.route('/no-register/:id').get(getUserNoRegister);
 
 module.exports = router;

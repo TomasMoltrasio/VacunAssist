@@ -95,7 +95,7 @@ userService.updateUser = async (req, res) => {
     vacunatorio: Number(req.body.vacunatorio) || user[0].vacunatorio,
     vacunatorioTrabajo:
       Number(req.body.vacunatorioTrabajo) || user[0].vacunatorioTrabajo,
-    riesgo: req.body.riesgo || user[0].riesgo,
+    riesgo: req.body.riesgo === null ? user[0].riesgo : req.body.riesgo,
     rol: req.body.rol || user[0].rol,
   };
   await User.findOneAndUpdate({ dni: Number(req.params.id) }, newUser);
@@ -106,6 +106,44 @@ userService.updateUser = async (req, res) => {
 userService.deleteUser = async (req, res) => {
   await User.findOneAndDelete({ dni: req.params.id });
   res.json('Usuario eliminado');
+};
+
+userService.getUserNoRegister = async (req, res) => {
+  const getEdad = (fecha) => {
+    let hoy = new Date();
+    let fechaNacimiento = new Date(fecha);
+    let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+    let diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth();
+    if (
+      diferenciaMeses < 0 ||
+      (diferenciaMeses === 0 && hoy.getDate() < fechaNacimiento.getDate())
+    ) {
+      edad--;
+    }
+    return edad;
+  };
+  const headers = {
+    'Content-Type': 'application/json',
+    'X-Api-Key': 'kTKtFQmwC01y0wdgE93Mn3bOhWYgt7Ty4KY3yZsU',
+  };
+  try {
+    const { data } = await axios.post(
+      `${urlBase}/person/lookup`,
+      {
+        dni: req.params.id,
+      },
+      { headers: headers }
+    );
+    const edad = getEdad(data.fechaNacimiento);
+    const user = {
+      nombre: data.nombre,
+      apellido: data.apellido,
+      edad: edad,
+    };
+    await res.json(user);
+  } catch (error) {
+    res.status(500).send('El dni no existe');
+  }
 };
 
 module.exports = userService;

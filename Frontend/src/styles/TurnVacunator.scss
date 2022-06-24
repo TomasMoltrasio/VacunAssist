@@ -109,13 +109,31 @@ outline: 1px solid var(--hospital-green);
 	height: 30px;
 	background-color: var(--hospital-green);
 	color: var(--very-light-pink);
-	
 }
 
+.form-vacunado-sinturno button:disabled {
+	background-color: red;
+	color: var(--white);
+}
 .nombre-vacunado{
+	width: 100%;
 	border: 2px solid var(--very-light-pink);
 	text-align: center;
 	margin: 5px 0px;
 	color: black;
 	background-color: var(--hospital-green);
+}
+
+.edad-vacunado {
+	width: 40%;
+	border: 2px solid var(--very-light-pink);
+	text-align: center;
+	margin: 5px 0px;
+	color: black;
+	background-color: var(--hospital-green);
+}
+
+.dosis-covid {
+	width: 10%;
+	text-align: center;
 }

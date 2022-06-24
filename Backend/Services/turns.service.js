@@ -50,7 +50,7 @@ const generateGripe = async (list) => {
   if (turnGripe.length !== 0) {
     let fecha = turnGripe[0].fecha.setDate(turnGripe[0].fecha.getDate() + 365);
     if (fecha - new Date().getTime() < 0) {
-      return date.setMonth(date.getMonth() + 6);
+      return date.setDate(date.getDate() + 7);
     } else {
       return new Date(fecha);
     }

@@ -61,6 +61,32 @@
     transition: all 0.4s ease-out;
 }
 
+.btn-certificado {
+    text-decoration: none;
+    color: var(--very-light-pink);
+    border: 1px solid var(--very-light-pink);
+    padding: 15px 40px;
+    border-radius: 8px;
+    background-color: yellow;
+    margin-top: 10%;
+    font-size: large;
+    transition: all 0.4s ease-out;
+}
+
+.btn-certificado:hover {
+    background-color: transparent;
+    color: yellow;
+    border-top: none;
+    border-bottom: none;
+    border-left: 4px solid yellow;
+    border-right: 4px solid yellow;
+    padding: 15px 80px;
+
+    box-shadow: 0px 0px 400px -101px var(--white) inset;
+    -webkit-box-shadow: 0px 0px 400px -101px var(--white) inset;
+    -moz-box-shadow: 0px 0px 400px -101px var(--white) inset;
+}
+
 .btn-inscripcion:hover:enabled {
     background-color: transparent;
     color: var(--white);

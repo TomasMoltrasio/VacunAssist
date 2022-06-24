@@ -1,6 +1,6 @@
 import React from "react";
 import "@styles/Turn.scss";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import swal from "sweetalert";
 import Cookies from "universal-cookie";
@@ -8,6 +8,7 @@ import Cookies from "universal-cookie";
 const TurnToday = ({ turno }) => {
   const [lote, setLote] = useState(null);
   const [marca, setMarca] = useState(null);
+  const [nombre, setNombre] = useState(null);
   const cookie = new Cookies();
   const user = cookie.get("user");
 
@@ -56,10 +57,22 @@ const TurnToday = ({ turno }) => {
     }
   };
 
+  const getNombre = async () => {
+    const res = await axios.get(
+      `http://localhost:3000/api/v1/users/${turno.dni}`
+    );
+    setNombre(res.data.nombre + " " + res.data.apellido);
+  };
+
+  useEffect(() => {
+    getNombre();
+  }, []);
+
   return (
     <div className="Turn-container">
       <table className="table-container">
         <tr className="Turn-titulo">
+          <th>Nombre</th>
           <th>DNI</th>
           <th>Vacuna</th>
           <th>Marca</th>
@@ -68,6 +81,7 @@ const TurnToday = ({ turno }) => {
           <th>Aplicar</th>
         </tr>
         <tr>
+          <th>{nombre}</th>
           <th>{turno.dni}</th>
           <th>{turno.marca}</th>
           <th>

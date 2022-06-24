@@ -5,6 +5,8 @@ import axios from "axios";
 import { useAuth } from "../context/useAuth";
 import swal from "sweetalert";
 import Cookies from "universal-cookie";
+import jsPDF from "jspdf";
+import logobn from "../assets/logos/LogoBN.png";
 
 const Campaign = () => {
   const [covid, setCovid] = useState(false);
@@ -16,6 +18,7 @@ const Campaign = () => {
   const cookie = new Cookies();
   const user = cookie.get("user");
   const espera = cookie.get("espera");
+  const turnos = cookie.get("turno");
 
   const btnCovid = () => {
     !covid
@@ -122,6 +125,76 @@ const Campaign = () => {
     fetchData();
   };
 
+  const elegirVacunatorio = (vacunatorio) => {
+    switch (vacunatorio) {
+      case 1:
+        return "Hospital 9 de Julio";
+      case 2:
+        return "Corralón municipal";
+      case 3:
+        return "Polideportivo";
+      case 4:
+        return "Otro";
+    }
+  };
+
+  const generatePDF = () => {
+    const res = turnos
+      .filter((turno) => turno.marca === "Fiebre")
+      .filter((turno) => turno.presente === "aplicada")
+      .filter((turno) => turno.vacunatorio <= 3);
+    const doc = new jsPDF();
+    const width = doc.internal.pageSize.getWidth();
+    doc.setFillColor(255, 255, 0);
+    doc.setDrawColor(0, 0, 0);
+    doc.roundedRect(10, 10, 190, 110, 3, 3, "FD");
+    doc.setFontSize(30);
+    doc.setFillColor(255, 0, 0);
+    doc.text(width / 2, 25, "Certificado Fiebre Amarilla", "center");
+    doc.setFontSize(15);
+    doc.text(
+      width / 2,
+      50,
+      "Certificamos que " +
+        user.nombre +
+        " " +
+        user.apellido +
+        " con DNI " +
+        user.dni,
+      "center"
+    );
+    doc.text(
+      width / 2,
+      60,
+      "se ha aplicado la vacuna " +
+        res[0].fabricante +
+        " contra la fiebre amarilla con lote " +
+        res[0].lote,
+      "center"
+    );
+    doc.text(
+      width / 2,
+      70,
+      "el dia " +
+        res[0].fecha.split("T")[0].split("-")[2] +
+        "/" +
+        res[0].fecha.split("-")[1] +
+        "/" +
+        res[0].fecha.split("-")[0] +
+        " en el vacunatorio " +
+        elegirVacunatorio(res[0].vacunatorio),
+      "center"
+    );
+    doc.line(100, 110, 145, 110);
+    doc.setFontSize(8);
+    doc.text(width / 2, 115, `Dr. ${res[0].vacunador}`, "left");
+    doc.addImage(logobn, "PNG", 40, 93, 40, 23);
+    doc.setFont("courier", "bolditalic");
+    doc.setFontSize(10);
+    doc.text(width / 2, 105, `${res[0].vacunador}`, "left");
+    doc.save("certificado.pdf");
+  };
+
   const turnoAutomatico = async (dni) => {
     await axios.post("http://localhost:3000/api/v1/turns/", { dni: dni });
   };
@@ -153,11 +226,27 @@ const Campaign = () => {
     const res = dataTurn
       .filter((turn) => turn.marca === "Fiebre")
       .filter((turn2) => turn2.presente === "aplicada");
-    if (data.edad > 60 || res.length !== 0) {
-      setDisFiebre(true);
+    if (data.edad > 60) {
+      setDisFiebre(
+        "La vacuna de la fiebre amarilla no se aplica a mayores de 60 años"
+      );
       axios.patch(`http://localhost:3000/api/v1/list/${user.dni}`, {
         fiebre: false,
       });
+    } else if (res.length !== 0) {
+      if (res[0].vacunatorio <= 3) {
+        setDisFiebre(true);
+        axios.patch(`http://localhost:3000/api/v1/list/${user.dni}`, {
+          fiebre: false,
+        });
+      } else {
+        setDisFiebre(
+          "La vacuna de la fiebre amarilla ya se aplico pero no en nuestros vacunatorios"
+        );
+        axios.patch(`http://localhost:3000/api/v1/list/${user.dni}`, {
+          fiebre: false,
+        });
+      }
     }
     if (data.edad < 18) {
       setDisCovid(true);
@@ -207,10 +296,13 @@ const Campaign = () => {
             >
               {fiebre ? "Darme de baja" : "Inscribirme"}
             </button>
-            {disFiebre ? (
-              <p>
-                La vacuna de la fiebre se da una sola vez y a menores de 60 años
-              </p>
+            {disFiebre !== false && disFiebre !== true ? (
+              <p>{disFiebre}</p>
+            ) : null}
+            {disFiebre === true ? (
+              <button className="btn-certificado" onClick={() => generatePDF()}>
+                Generar certificado
+              </button>
             ) : null}
           </div>
         </div>

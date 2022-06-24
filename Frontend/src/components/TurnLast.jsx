@@ -43,7 +43,7 @@ const TurnLast = ({ turno }) => {
         <tr>
           <th>{turno.marca}</th>
           <th></th>
-          <th>{turno.fabricante}</th>
+          <th>{turno.fabricante === "" ? "-" : turno.fabricante}</th>
           <th></th>
           <th>{turno.dosis === 0 ? "-" : turno.dosis}</th>
           <th></th>

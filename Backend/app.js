@@ -16,5 +16,6 @@ app.use(cors());
 app.use('/api/v1/users', require('./Routes/usuarios'));
 app.use('/api/v1/turns', require('./Routes/turnos'));
 app.use('/api/v1/list', require('./Routes/listas'));
+app.use('/api/v1/vacunatorios', require('./Routes/vacunatorios'));
 
 module.exports = app;
