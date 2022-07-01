@@ -8,6 +8,8 @@ import MyAccount from "@pages/MyAccount";
 import Campaign from "@pages/Campaign";
 import Turns from "@pages/Turns";
 import TurnVacunator from "@pages/TurnVacunator";
+import Stock from "@pages/Stock";
+import Register from "@pages/Register";
 import "@styles/global.css";
 import NotFound from "../pages/NotFound";
 import { AuthProvider } from "../context/useAuth";
@@ -31,6 +33,8 @@ const App = () => {
                 path="/turns-vacunador"
                 element={<TurnVacunator />}
               />
+              <Route exact path="/stock" element={<Stock />} />
+              <Route exact path="/register" element={<Register />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

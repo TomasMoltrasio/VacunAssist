@@ -51,6 +51,13 @@ const Campaign = () => {
               `http://localhost:3000/api/v1/list/${user.dni}`,
               { covid: espera.covid * -1 }
             );
+            const { data } = await axios.get(
+              `http://localhost:3000/api/v1/turns/${user.dni}`
+            );
+            const turno = data.filter((t) => t.marca === "Covid");
+            await axios.delete(
+              `http://localhost:3000/api/v1/turns/${turno[0]._id}`
+            );
             auth.setearEspera(res.data);
           }
         });
@@ -86,6 +93,13 @@ const Campaign = () => {
             await axios.patch(`http://localhost:3000/api/v1/list/${user.dni}`, {
               gripe: false,
             });
+            const { data } = await axios.get(
+              `http://localhost:3000/api/v1/turns/${user.dni}`
+            );
+            const turno = data.filter((t) => t.marca === "Gripe");
+            await axios.delete(
+              `http://localhost:3000/api/v1/turns/${turno[0]._id}`
+            );
           }
         });
 
@@ -120,6 +134,13 @@ const Campaign = () => {
             await axios.patch(`http://localhost:3000/api/v1/list/${user.dni}`, {
               fiebre: false,
             });
+            const { data } = await axios.get(
+              `http://localhost:3000/api/v1/turns/${user.dni}`
+            );
+            const turno = data.filter((t) => t.marca === "Fiebre");
+            await axios.delete(
+              `http://localhost:3000/api/v1/turns/${turno[0]._id}`
+            );
           }
         });
     fetchData();

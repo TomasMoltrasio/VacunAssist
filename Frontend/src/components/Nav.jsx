@@ -61,6 +61,16 @@ const Nav = () => {
               Turnos vacunador
             </Link>
           ) : null}
+          {user.rol === 1 ? (
+            <>
+              <Link to="/stock" className="Link">
+                Stock
+              </Link>
+              <Link to="/register" className="Link">
+                Registro
+              </Link>
+            </>
+          ) : null}
         </ul>
       </div>
       <div className="navbar-right">

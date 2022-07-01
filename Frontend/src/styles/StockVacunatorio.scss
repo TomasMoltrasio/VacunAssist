@@ -1,0 +1,65 @@
+@import 'vars';
+
+
+.Stock-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+}
+
+.StockVacunatorio-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    margin-top: 25px;
+    margin-right: 25px;
+    width: 100%;
+    border: 2px solid var(--very-light-pink);
+    border-radius: 10px;
+    height: 100%;
+    background-color: var(--hospital-green);
+}
+
+.StockVacunatorio-container th{
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.StockVacunatorio-container td {
+    text-align: center;
+    font-size: 1.1rem;
+    align-self: center;
+}
+
+
+
+.titulo-stock {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+
+}
+
+.icono-agregar-stock {
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.tabla-stock {
+    text-align: center;
+    align-self: center;
+}
+
+
+
+.tabla-stock thead tbody {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}

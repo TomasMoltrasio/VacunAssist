@@ -11,10 +11,7 @@ const generateCovid = async (list) => {
   )
     return 'error';
   const date = new Date();
-  if (
-    turnCovid.length !== 0 &&
-    (list[0].riesgo === true || list[0].edad > 60)
-  ) {
+  if (turnCovid.length !== 0) {
     let fecha = turnCovid[turnCovid.length - 1].fecha.setMonth(
       turnCovid[turnCovid.length - 1].fecha.getMonth() + 3
     );

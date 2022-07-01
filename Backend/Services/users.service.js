@@ -134,6 +134,7 @@ userService.getUserNoRegister = async (req, res) => {
       },
       { headers: headers }
     );
+
     const edad = getEdad(data.fechaNacimiento);
     const user = {
       nombre: data.nombre,

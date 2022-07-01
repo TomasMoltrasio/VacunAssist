@@ -8,7 +8,9 @@ const Turns = () => {
   const cookie = new Cookies();
   const turn = cookie.get("turno");
   const turnoActivo = turn.filter((turno) => turno.presente === "activo");
-  const turnoPasado = turn.filter((turno) => turno.presente !== "activo");
+  const turnoPasado = turn
+    .filter((turno) => turno.presente !== "activo")
+    .filter((turno) => turno.vacunatorio < 4);
 
   return (
     <div className="Turns">

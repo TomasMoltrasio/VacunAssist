@@ -18,24 +18,33 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = {
-      tramite,
-      sexo,
-    };
-    try {
-      const response = await axios.post(
-        `http://localhost:3000/api/v1/users/${dni}`,
-        data
-      );
-      const usuario = await response.data;
-      await auth.login(usuario);
-      navigate("/campaign");
-    } catch (error) {
-      swal({
-        title: "Inicio de sesion fallido",
-        text: error.request.response,
-        icon: "error",
-      });
+    if (dni === null || tramite === null || sexo === null) {
+      swal("Error", "Todos los campos son obligatorios", "error");
+    } else {
+      const data = {
+        tramite,
+        sexo,
+      };
+      try {
+        const response = await axios.post(
+          `http://localhost:3000/api/v1/users/${dni}`,
+          data
+        );
+        const usuario = await response.data;
+        await auth.login(usuario);
+        console.log(usuario);
+        usuario.rol === 1
+          ? navigate("/register")
+          : usuario.rol === 2
+          ? navigate("/turns-vacunador")
+          : navigate("/campaign");
+      } catch (error) {
+        swal({
+          title: "Inicio de sesion fallido",
+          text: error.request.response,
+          icon: "error",
+        });
+      }
     }
   };
 

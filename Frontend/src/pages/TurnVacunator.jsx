@@ -253,6 +253,11 @@ const TurnVacunator = () => {
 
   const verificarMarca = async (e) => {
     setMarca(e.target.value);
+    if (e.target.value === "Covid") {
+      setDosis(Math.abs(dosis));
+    } else {
+      setDosis(dosis * -1);
+    }
     const { data } = await axios.get(
       `http://localhost:3000/api/v1/vacunatorios/${user.vacunatorioTrabajo}`
     );

@@ -38,39 +38,50 @@ const CreateAccount = () => {
 
   const confirmarDatos = async (e) => {
     e.preventDefault();
-    const data = {
-      dni,
-      tramite: password,
-      sexo,
-      email,
-      vacunatorio,
-      riesgo,
-      rol: "3",
-    };
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/api/v1/users",
-        data
-      );
-      const usuario = await response.data;
-      await auth.login(usuario);
+    if (
+      dni === null ||
+      password === null ||
+      email === null ||
+      vacunatorio === null ||
+      riesgo === null ||
+      sexo === null
+    ) {
+      swal("Error", "Todos los campos son obligatorios", "error");
+    } else {
+      const data = {
+        dni,
+        tramite: password,
+        sexo,
+        email,
+        vacunatorio,
+        riesgo,
+        rol: "3",
+      };
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/api/v1/users",
+          data
+        );
+        const usuario = await response.data;
+        await auth.login(usuario);
 
-      await axios.post("http://localhost:3000/api/v1/list", {
-        dni: dni,
-        riesgo: riesgo,
-        vacunatorio: vacunatorio,
-      });
-      swal({
-        title: "Registro exitoso",
-        text: "Volveras a la pantalla de inicio de sesion",
-        icon: "success",
-      }).then(() => navigate("/"));
-    } catch (error) {
-      swal({
-        title: "Registro fallido",
-        text: error.request.response,
-        icon: "error",
-      });
+        await axios.post("http://localhost:3000/api/v1/list", {
+          dni: dni,
+          riesgo: riesgo,
+          vacunatorio: vacunatorio,
+        });
+        swal({
+          title: "Registro exitoso",
+          text: "Volveras a la pantalla de inicio de sesion",
+          icon: "success",
+        }).then(() => navigate("/"));
+      } catch (error) {
+        swal({
+          title: "Registro fallido",
+          text: error.request.response,
+          icon: "error",
+        });
+      }
     }
   };
 
