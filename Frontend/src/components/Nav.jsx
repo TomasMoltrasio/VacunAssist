@@ -56,6 +56,9 @@ const Nav = () => {
           <Link to="/turns" className="Link">
             Turnos
           </Link>
+          <Link to="/history" className="Link">
+            Historial
+          </Link>
           {user.rol === 2 ? (
             <Link to="/turns-vacunador" className="Link">
               Turnos vacunador
@@ -68,6 +71,9 @@ const Nav = () => {
               </Link>
               <Link to="/register" className="Link">
                 Registro
+              </Link>
+              <Link to="/turns-admin" className="Link">
+                Turnos Admin
               </Link>
             </>
           ) : null}

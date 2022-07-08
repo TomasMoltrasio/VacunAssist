@@ -19,7 +19,7 @@ const MyAccount = () => {
   const [dosis, setDosis] = useState(espera.covid);
   const [gripe, setGripe] = useState(false);
   const [fiebre, setFiebre] = useState(false);
-  const [disFiebre, setDisFiebre] = useState(false);
+  const [vacunatorio, setVacunatorio] = useState(null);
   const [mod, setMod] = useState(false);
   const [riesgo, setRiesgo] = useState(espera.riesgo);
   const [startdateCovid, setStartDateCovid] = useState(new Date());
@@ -241,6 +241,38 @@ const MyAccount = () => {
     });
   };
 
+  const confirmarDatos = async (e) => {
+    e.preventDefault();
+    swal({
+      title: "Modificar vacunatorio",
+      text: "¿Estas seguro de que deseas modificar el vacunatorio?",
+      icon: "info",
+      buttons: ["NO", "SI"],
+    }).then(async (r) => {
+      if (r) {
+        const lista = await axios.patch(
+          `http://localhost:3000/api/v1/list/${user.dni}`,
+          {
+            vacunatorio: vacunatorio,
+          }
+        );
+        auth.setearEspera(lista.data);
+        const usuario = await axios.patch(
+          `http://localhost:3000/api/v1/users/${user.dni}`,
+          {
+            vacunatorio: vacunatorio,
+          }
+        );
+        auth.login(usuario.data);
+        swal({
+          title: "Datos actualizados",
+          text: "Los datos han sido actualizados con exito",
+          icon: "success",
+        });
+      }
+    });
+  };
+
   return (
     <div className="MyAccount">
       <div className="MyAccount-container">
@@ -267,6 +299,32 @@ const MyAccount = () => {
             </div>
           </div>
         </form>
+        <div className="choise-vacunatorio-container">
+          <label htmlFor="choise-vacunatorio">Elegir vacunatorio</label>
+          <select
+            className="choise-vacunatorio"
+            id="choise-vacunatorio"
+            onChange={(e) => setVacunatorio(e.target.value)}
+          >
+            <option value="">Elegir vacunatorio</option>
+            <option selected={espera.vacunatorio === 1} value="1">
+              Hospital 9 de Julio
+            </option>
+            <option selected={espera.vacunatorio === 2} value="2">
+              Corralon municipal
+            </option>
+            <option selected={espera.vacunatorio === 3} value="3">
+              Polideportivo
+            </option>
+          </select>
+          <button
+            className="secondary-button login-button"
+            onClick={(e) => confirmarDatos(e)}
+            disabled={vacunatorio === "" || vacunatorio === null}
+          >
+            Confirmar
+          </button>
+        </div>
         <span className="spanEdad">
           <b>¿Padece alguna de las siguientes condiciones?</b>
         </span>

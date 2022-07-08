@@ -10,6 +10,8 @@ import Turns from "@pages/Turns";
 import TurnVacunator from "@pages/TurnVacunator";
 import Stock from "@pages/Stock";
 import Register from "@pages/Register";
+import History from "@pages/History";
+import TurnsAdmin from "@pages/TurnsAdmin";
 import "@styles/global.css";
 import NotFound from "../pages/NotFound";
 import { AuthProvider } from "../context/useAuth";
@@ -35,6 +37,8 @@ const App = () => {
               />
               <Route exact path="/stock" element={<Stock />} />
               <Route exact path="/register" element={<Register />} />
+              <Route exact path="/history" element={<History />} />
+              <Route exact path="/turns-admin" element={<TurnsAdmin />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

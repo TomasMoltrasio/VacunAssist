@@ -1,0 +1,30 @@
+@import 'vars';
+
+.history-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.history-table-container {
+    background-color: var(--hospital-green);
+    width: 50%;
+    border-radius: 15px;
+    border: 3px solid var(--very-light-pink);
+}
+
+
+.history-table-container th{
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.history-table-container td{
+    text-align: center;
+    font-size: 1.4rem;
+}

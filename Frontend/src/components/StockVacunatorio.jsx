@@ -3,6 +3,7 @@ import "@styles/StockVacunatorio.scss";
 import swal from "sweetalert";
 import axios from "axios";
 import { CgAddR } from "react-icons/cg";
+import { useState } from "react";
 
 const StockVacunatorio = ({ vacunatorio }) => {
   const sumarStock = async (e) => {
@@ -14,6 +15,7 @@ const StockVacunatorio = ({ vacunatorio }) => {
       dangerMode: true,
     }).then(async (cantidad) => {
       if (cantidad > 0) {
+        console.log(e.target.id);
         await axios.patch(
           `http://localhost:3000/api/v1/vacunatorios/${vacunatorio.numero}`,
           {
@@ -54,13 +56,14 @@ const StockVacunatorio = ({ vacunatorio }) => {
               <td>{vacunatorio.stockCovid}</td>
               <td />
               <td>
-                <CgAddR
-                  className="icono-agregar-stock"
+                <button
                   id="covid"
                   onClick={(e) => {
                     sumarStock(e);
                   }}
-                />
+                >
+                  +
+                </button>
               </td>
             </tr>
             <tr>
@@ -69,13 +72,14 @@ const StockVacunatorio = ({ vacunatorio }) => {
               <td>{vacunatorio.stockGripe}</td>
               <td />
               <td>
-                <CgAddR
-                  className="icono-agregar-stock"
+                <button
                   id="gripe"
                   onClick={(e) => {
                     sumarStock(e);
                   }}
-                />
+                >
+                  +
+                </button>
               </td>
             </tr>
             <tr>
@@ -84,13 +88,14 @@ const StockVacunatorio = ({ vacunatorio }) => {
               <td>{vacunatorio.stockFiebre}</td>
               <td />
               <td>
-                <CgAddR
-                  className="icono-agregar-stock"
+                <button
                   id="fiebre"
                   onClick={(e) => {
                     sumarStock(e);
                   }}
-                />
+                >
+                  +
+                </button>
               </td>
             </tr>
           </tbody>

@@ -205,6 +205,35 @@
 	  text-align: center;
   }
 
+  .choise-vacunatorio-container {
+	display: flex;
+	flex-direction: column;
+	  margin-top: 25px;
+	  text-align: center;
+  }
+
+  .choise-vacunatorio-container label {
+	  margin-bottom: 10px;
+  }
+
+  .choise-vacunatorio-container select {
+		background-color: var(--hospital-green);
+		border-top: 3px solid var(--very-light-pink);
+		border-left: none;
+		border-right: none;
+		border-bottom: 3px solid var(--very-light-pink);
+		margin-bottom: 10px;
+  }
+
+  .choise-vacunatorio-container button {
+	  margin-bottom: 10px;
+	  width: 100%;
+	  height: 100%;
+	  margin: 0px;
+  }
+
+
+
 @media (max-width: 640px) {
 	.form-container {
 		height: 100%;

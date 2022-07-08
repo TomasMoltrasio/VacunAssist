@@ -3,14 +3,33 @@ import "@styles/Turns.scss";
 import TurnActive from "@components/TurnActive";
 import TurnLast from "@components/TurnLast";
 import Cookies from "universal-cookie";
+import { useEffect, useState } from "react";
+import { useAuth } from "../context/useAuth";
+import axios from "axios";
 
 const Turns = () => {
   const cookie = new Cookies();
-  const turn = cookie.get("turno");
-  const turnoActivo = turn.filter((turno) => turno.presente === "activo");
-  const turnoPasado = turn
-    .filter((turno) => turno.presente !== "activo")
-    .filter((turno) => turno.vacunatorio < 4);
+  const user = cookie.get("user");
+  const auth = useAuth();
+  const [turnoActivo, setTurnoActivo] = useState([]);
+  const [turnoPasado, setTurnoPasado] = useState([]);
+
+  const getTurn = async () => {
+    let { data } = await axios.get(
+      `http://localhost:3000/api/v1/turns/${user.dni}`
+    );
+    auth.setearTurno(data);
+    setTurnoActivo(data.filter((turno) => turno.presente === "activo"));
+    setTurnoPasado(
+      data
+        .filter((turno) => turno.presente !== "activo")
+        .filter((turno) => turno.vacunatorio < 4)
+    );
+  };
+
+  useEffect(() => {
+    getTurn();
+  }, []);
 
   return (
     <div className="Turns">

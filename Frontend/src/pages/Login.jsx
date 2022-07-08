@@ -32,7 +32,14 @@ const Login = () => {
         );
         const usuario = await response.data;
         await auth.login(usuario);
-        console.log(usuario);
+        const turno = await axios.get(
+          `http://localhost:3000/api/v1/turns/${usuario.dni}`
+        );
+        auth.setearTurno(turno.data);
+        const res = await axios.get(
+          `http://localhost:3000/api/v1/list/${usuario.dni}`
+        );
+        auth.setearEspera(res.data);
         usuario.rol === 1
           ? navigate("/register")
           : usuario.rol === 2

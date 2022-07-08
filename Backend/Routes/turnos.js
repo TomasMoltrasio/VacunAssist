@@ -7,11 +7,21 @@ const {
   deleteTurn,
   deleteTurns,
   updateTurn,
+  getAverage,
+  getStock,
+  getAbsent,
+  addAbsent,
 } = require('../Services/turns.service');
 
 const router = Router();
 
 router.route('/').get(getTurns).post(createTurn).delete(deleteTurns);
+
+router.route('/stock').post(getStock);
+
+router.route('/average').post(getAverage);
+
+router.route('/absent').get(getAbsent).post(addAbsent);
 
 router
   .route('/:id')

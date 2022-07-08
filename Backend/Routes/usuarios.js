@@ -7,6 +7,7 @@ const {
   deleteUser,
   logIn,
   getUserNoRegister,
+  registerWithDni,
 } = require('../Services/users.service');
 
 const router = Router();
@@ -20,6 +21,6 @@ router
   .patch(updateUser)
   .delete(deleteUser);
 
-router.route('/no-register/:id').get(getUserNoRegister);
+router.route('/no-register/:id').get(getUserNoRegister).post(registerWithDni);
 
 module.exports = router;

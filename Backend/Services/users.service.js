@@ -147,4 +147,36 @@ userService.getUserNoRegister = async (req, res) => {
   }
 };
 
+userService.registerWithDni = async (req, res) => {
+  const headers = {
+    'Content-Type': 'application/json',
+    'X-Api-Key': 'kTKtFQmwC01y0wdgE93Mn3bOhWYgt7Ty4KY3yZsU',
+  };
+  try {
+    const { data } = await axios.post(
+      `${urlBase}/person/lookup`,
+      {
+        dni: req.params.id,
+      },
+      { headers: headers }
+    );
+
+    const newUser = new User({
+      rol: req.body.rol || 0,
+      nombre: data.nombre || ' ',
+      apellido: data.apellido,
+      dni: req.params.id,
+      fechaNacimiento: data.fechaNacimiento,
+      email: req.body.email,
+      vacunatorio: Number(req.body.vacunatorio),
+      riesgo: req.body.riesgo,
+      vacunatorioTrabajo: req.body.vacunatorioTrabajo || 0,
+    });
+    await newUser.save();
+    res.json('Usuario creado');
+  } catch (error) {
+    res.status(500).send('El dni no existe');
+  }
+};
+
 module.exports = userService;

@@ -6,9 +6,9 @@ import { useState, useEffect } from "react";
 
 const RegisterVacunator = () => {
   const [dni, setDni] = useState(null);
-  const [password, setPassword] = useState(null);
   const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
+  const [rol, setRol] = useState(0);
   const [vacunatorio, setVacunatorio] = useState(null);
   const [mod, setMod] = useState(null);
   const [error, setError] = useState(null);
@@ -33,10 +33,10 @@ const RegisterVacunator = () => {
         if (res.data !== undefined) {
           setName(res.data.nombre + " " + res.data.apellido);
           setEmail(res.data.email);
+          setRol(res.data.rol);
           setMod(true);
           setError(null);
         }
-        console.log(name);
       } catch (error) {
         try {
           const { data } = await axios.get(
@@ -73,7 +73,6 @@ const RegisterVacunator = () => {
 
   const confirmarDatos = async (e) => {
     e.preventDefault();
-    console.log(name, email, dni, password, vacunatorio);
     if (validarEmail(email) !== 1) {
       swal("Error", "Email no valido", "error");
       return;
@@ -83,9 +82,19 @@ const RegisterVacunator = () => {
           rol: 2,
           vacunatorioTrabajo: vacunatorio,
         });
-        swal("Registro exitoso", "", "success").then(() => {
-          location.reload();
-        });
+        if (rol === 2) {
+          swal(
+            "Exito",
+            "El vacunatorio ha sido cambiado con exito",
+            "success"
+          ).then(() => {
+            location.reload();
+          });
+        } else {
+          swal("Registro exitoso", "", "success").then(() => {
+            location.reload();
+          });
+        }
       } catch (error) {
         swal("Error", "No se pudo registrar", "error");
       }
@@ -96,16 +105,16 @@ const RegisterVacunator = () => {
       vacunatorio !== null
     ) {
       try {
-        await axios.post(`http://localhost:3000/api/v1/users`, {
-          dni,
-          tramite: password,
-          email,
-          rol: 2,
-          riesgo: true,
-          vacunatorio: 1,
-          sexo: "M",
-          vacunatorioTrabajo: vacunatorio,
-        });
+        await axios.post(
+          `http://localhost:3000/api/v1/users/no-register/${dni}`,
+          {
+            email,
+            rol: 2,
+            riesgo: true,
+            vacunatorio: 1,
+            vacunatorioTrabajo: vacunatorio,
+          }
+        );
         swal("Registro exitoso", "", "success").then(() => {
           location.reload();
         });
@@ -125,13 +134,6 @@ const RegisterVacunator = () => {
         <input type="text" id="nombre" value={name} disabled />
         <label htmlFor="dni">DNI</label>
         <input type="text" id="dni" onChange={(e) => setDni(e.target.value)} />
-        <label htmlFor="tramite">Numero de tramite</label>
-        <input
-          type="password"
-          id="tramite"
-          disabled={mod === true}
-          onChange={(e) => setPassword(e.target.value)}
-        />
         <label htmlFor="email">Email</label>
         <input
           type="email"
