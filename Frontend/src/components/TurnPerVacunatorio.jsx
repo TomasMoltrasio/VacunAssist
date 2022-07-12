@@ -29,12 +29,12 @@ const TurnPerVacunatorio = ({ vacunatorio, num, title }) => {
             <td>{vacunatorio !== undefined ? vacunatorio.covid : null}</td>
           </tr>
           <tr>
-            <td>Fiebre</td>
-            <td>{vacunatorio !== undefined ? vacunatorio.fiebre : null}</td>
-          </tr>
-          <tr>
             <td>Gripe</td>
             <td>{vacunatorio !== undefined ? vacunatorio.gripe : null}</td>
+          </tr>
+          <tr>
+            <td>Fiebre</td>
+            <td>{vacunatorio !== undefined ? vacunatorio.fiebre : null}</td>
           </tr>
         </tbody>
       </table>

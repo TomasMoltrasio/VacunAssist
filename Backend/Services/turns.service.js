@@ -1,6 +1,7 @@
 const turnService = {};
 const Turn = require('../models/Turno');
 const List = require('../models/ListaEspera');
+const Vacunatorio = require('../models/Vacunatorio');
 
 const generateCovid = async (list) => {
   const turn = await Turn.find({ dni: list[0].dni });
@@ -347,9 +348,11 @@ turnService.getAbsent = async (req, res) => {
 };
 
 turnService.addAbsent = async (req, res) => {
+  const vacunatorio = await Vacunatorio.find();
   const turnos = await Turn.find();
   const newTurnos = turnos.filter((turno) => turno.presente === 'falto');
   const absent = [];
+  const response = [];
   for (let i = 1; i < 4; i++) {
     absent.push(sumarStock(newTurnos, i));
   }
@@ -368,7 +371,19 @@ turnService.addAbsent = async (req, res) => {
     });
     await Turn.findByIdAndUpdate(turno._id, nuevo);
   });
-  res.json(absent);
+  for (let i = 1; i < 4; i++) {
+    let nuevo = await Vacunatorio.findOneAndUpdate(
+      { numero: i },
+      {
+        stockCovid: vacunatorio[i - 1].stockCovid + absent[i - 1].covid,
+        stockGripe: vacunatorio[i - 1].stockGripe + absent[i - 1].gripe,
+        stockFiebre: vacunatorio[i - 1].stockFiebre + absent[i - 1].fiebre,
+      }
+    );
+    response.push(nuevo);
+  }
+
+  res.json({ response, vacunatorio, absent });
 };
 
 module.exports = turnService;

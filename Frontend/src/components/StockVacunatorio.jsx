@@ -24,9 +24,7 @@ const StockVacunatorio = ({ vacunatorio }) => {
             stockGripe: e.target.id === "gripe" ? Number(cantidad) : 0,
           }
         );
-        swal("Stock actualizado", "", "success").then(() => {
-          location.reload();
-        });
+        swal("Stock actualizado", "", "success");
       } else if (cantidad === "") {
         swal("Error", "Debe ingresar una cantidad", "error");
       } else if (cantidad < 0) {
