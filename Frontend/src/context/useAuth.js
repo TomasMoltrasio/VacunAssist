@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
     cookie.remove("user", { path: "/" });
     cookie.remove("turno", { path: "/" });
     cookie.remove("espera", { path: "/" });
+    cookie.remove("rol", { path: "/" });
   };
 
   const setearEspera = (espera) => {
@@ -29,8 +30,14 @@ export const AuthProvider = ({ children }) => {
     cookie.set("turno", turno, { path: "/" });
   };
 
+  const setRol = (rol) => {
+    cookie.set("rol", rol, { path: "/" });
+  };
+
   return (
-    <AuthContext.Provider value={{ login, logout, setearEspera, setearTurno }}>
+    <AuthContext.Provider
+      value={{ login, logout, setearEspera, setearTurno, setRol }}
+    >
       {children}
     </AuthContext.Provider>
   );

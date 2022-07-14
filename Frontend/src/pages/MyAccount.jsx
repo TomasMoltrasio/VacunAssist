@@ -174,6 +174,7 @@ const MyAccount = () => {
             riesgo: !riesgo,
           }
         );
+        res.data.rol = user.rol;
         auth.login(res.data);
         const { data } = await axios.patch(
           `http://localhost:3000/api/v1/list/${user.dni}`,

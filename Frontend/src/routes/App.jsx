@@ -12,6 +12,7 @@ import Stock from "@pages/Stock";
 import Register from "@pages/Register";
 import History from "@pages/History";
 import TurnsAdmin from "@pages/TurnsAdmin";
+import AverageDay from "@pages/AverageDay";
 import "@styles/global.css";
 import NotFound from "../pages/NotFound";
 import { AuthProvider } from "../context/useAuth";
@@ -39,6 +40,7 @@ const App = () => {
               <Route exact path="/register" element={<Register />} />
               <Route exact path="/history" element={<History />} />
               <Route exact path="/turns-admin" element={<TurnsAdmin />} />
+              <Route exact path="/average-day" element={<AverageDay />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

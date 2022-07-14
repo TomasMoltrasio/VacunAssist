@@ -79,7 +79,7 @@ const RegisterVacunator = () => {
     } else if (mod === true) {
       try {
         await axios.patch(`http://localhost:3000/api/v1/users/${dni}`, {
-          rol: 2,
+          rol: rol === 1 ? 4 : 2,
           vacunatorioTrabajo: vacunatorio,
         });
         if (rol === 2) {

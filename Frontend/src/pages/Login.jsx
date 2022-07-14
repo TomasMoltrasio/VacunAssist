@@ -16,6 +16,74 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  const choiseRol = (data) => {
+    switch (data.rol) {
+      case 1: // Administrador
+        swal({
+          title: "Bienvenido",
+          text: "¿Con que rol desea ingresar?",
+          buttons: ["Ciudadano", "Administrador"],
+        }).then(async (r) => {
+          if (r) {
+            data.rol = 1;
+            await auth.login(data);
+            navigate("/register");
+          } else {
+            data.rol = 3;
+            await auth.login(data);
+            navigate("/campaign");
+          }
+        });
+        break;
+      case 2: // Vacunador
+        swal({
+          title: "Bienvenido",
+          text: "¿Con que rol desea ingresar?",
+          buttons: ["Ciudadano", "Vacunador"],
+        }).then(async (r) => {
+          if (r) {
+            data.rol = 2;
+            await auth.login(data);
+            navigate("/turns-vacunador");
+          } else {
+            data.rol = 3;
+            await auth.login(data);
+            navigate("/campaign");
+          }
+        });
+        break;
+      case 3: // Ciudadano
+        data.rol = 3;
+        auth.login(data);
+        navigate("/campaign");
+        break;
+      case 4: // Administrador y Vacunador
+        swal({
+          title: "Bienvenido",
+          text: "¿Con que rol desea ingresar?",
+          buttons: {
+            ciudadano: "Ciudadano",
+            vacunador: "Vacunador",
+            administrador: "Administrador",
+          },
+        }).then(async (r) => {
+          if (r === "ciudadano") {
+            data.rol = 3;
+            await auth.login(data);
+            navigate("/campaign");
+          } else if (r === "vacunador") {
+            data.rol = 2;
+            await auth.login(data);
+            navigate("/turns-vacunador");
+          } else if (r === "administrador") {
+            data.rol = 1;
+            await auth.login(data);
+            navigate("/register");
+          }
+        });
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (dni === null || tramite === null || sexo === null) {
@@ -31,20 +99,13 @@ const Login = () => {
           data
         );
         const usuario = await response.data;
-        await auth.login(usuario);
         const turno = await axios.get(
-          `http://localhost:3000/api/v1/turns/${usuario.dni}`
+          `http://localhost:3000/api/v1/turns/${dni}`
         );
         auth.setearTurno(turno.data);
-        const res = await axios.get(
-          `http://localhost:3000/api/v1/list/${usuario.dni}`
-        );
+        const res = await axios.get(`http://localhost:3000/api/v1/list/${dni}`);
         auth.setearEspera(res.data);
-        usuario.rol === 1
-          ? navigate("/register")
-          : usuario.rol === 2
-          ? navigate("/turns-vacunador")
-          : navigate("/campaign");
+        choiseRol(usuario);
       } catch (error) {
         swal({
           title: "Inicio de sesion fallido",

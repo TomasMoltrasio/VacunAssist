@@ -133,6 +133,12 @@ border-radius: 15px;
 	margin-right: 5px;
 	font-size: 17px;
 }
+
+.editar-rol{
+	margin-right: 5px;
+	font-size: 14px;
+}
+
 .cerrar-sesion {
 	margin-right: 3px;
 	font-size: 19px;
@@ -143,6 +149,10 @@ li b {
 	font-size: 14px;
 	font-weight: 500;
 	cursor: pointer;
+}
+
+li b:disabled {
+	color: var(--very-light-pink);
 }
 
 

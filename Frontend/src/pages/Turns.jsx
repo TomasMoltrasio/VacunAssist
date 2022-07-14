@@ -24,6 +24,7 @@ const Turns = () => {
       data
         .filter((turno) => turno.presente !== "activo")
         .filter((turno) => turno.vacunatorio < 4)
+        .filter((turno) => turno.sinTurno === 0)
     );
   };
 

@@ -159,10 +159,13 @@ const TurnVacunator = () => {
               vacunador: user.nombre + " " + user.apellido,
               presente: "aplicada",
               fecha: new Date().toISOString(),
+              sinTurno: 1,
             });
-            await axios.patch(`http://localhost:3000/api/v1/list/${dni}`, {
-              covid: marca === "Covid" ? dosis + 1 : null,
-            });
+            if (edad === 0) {
+              await axios.patch(`http://localhost:3000/api/v1/list/${dni}`, {
+                covid: marca === "Covid" ? dosis + 1 : null,
+              });
+            }
             await axios.patch(
               `http://localhost:3000/api/v1/vacunatorios/${user.vacunatorioTrabajo}`,
               {
@@ -327,6 +330,13 @@ const TurnVacunator = () => {
               </select>
               {stock > 0 ? (
                 <>
+                  <label>Stock</label>
+                  <input
+                    type="text"
+                    value={stock}
+                    disabled
+                    className="dosis-covid"
+                  />
                   <label>Marca</label>
                   <input
                     type="text"

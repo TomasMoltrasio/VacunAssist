@@ -96,6 +96,7 @@ turnService.createTurn = async (req, res) => {
         vacunatorio: turno.vacunatorio,
         vacunador: req.body.vacunador || '',
         presente: 'activo',
+        sinTurno: turno.sinTurno || 0,
       }).save();
     });
     res.json('Turno creado');
@@ -115,6 +116,7 @@ turnService.createTurnLast = async (req, res) => {
     vacunatorio: req.body.vacunatorio || 4,
     presente: req.body.presente || 'aplicada',
     vacunador: req.body.vacunador || '',
+    sinTurno: req.body.sinTurno || 0,
   });
   await newTurn.save();
   res.json('Turno creado');
@@ -141,6 +143,7 @@ turnService.getTurn = async (req, res) => {
       vacunador: turno.vacunador,
       presente:
         turno.presente == 'activo' && hoy < tomorrow ? 'falto' : turno.presente,
+      sinTurno: turno.sinTurno,
     });
     await Turn.findByIdAndUpdate(turno._id, nuevo);
   });
@@ -168,6 +171,7 @@ turnService.getTurns = async (req, res) => {
       vacunador: turno.vacunador,
       presente:
         turno.presente == 'activo' && hoy < tomorrow ? 'falto' : turno.presente,
+      sinTurno: turno.sinTurno,
     });
     await Turn.findByIdAndUpdate(turno._id, nuevo);
   });
@@ -189,12 +193,31 @@ turnService.updateTurn = async (req, res) => {
     vacunador: req.body.vacunador || turn.vacunador,
     vacunatorio: turn.vacunatorio,
     presente: req.body.presente || turn.presente,
+    sinTurno: req.body.sinTurno || turn.sinTurno,
   });
   await Turn.findByIdAndUpdate(req.params.id, newTurn);
   res.json(newTurn);
 };
 
 turnService.deleteTurn = async (req, res) => {
+  const turn = await Turn.findById(req.params.id);
+  const semana = new Date();
+  semana.setDate(semana.getDate() + 7);
+  if (turn.fecha <= semana && turn.fecha >= new Date()) {
+    const vacunatorio = await Vacunatorio.findOne({ numero: turn.vacunatorio });
+    switch (turn.marca) {
+      case 'Covid':
+        vacunatorio.stockCovid = vacunatorio.stockCovid + 1;
+        break;
+      case 'Gripe':
+        vacunatorio.stockGripe = vacunatorio.stockGripe + 1;
+        break;
+      case 'Fiebre':
+        vacunatorio.stockFiebre = vacunatorio.stockFiebre + 1;
+        break;
+    }
+    await Vacunatorio.findByIdAndUpdate(vacunatorio._id, vacunatorio);
+  }
   await Turn.findByIdAndDelete(req.params.id);
   res.json('Turno eliminado');
 };
@@ -204,7 +227,7 @@ turnService.deleteTurns = async (req, res) => {
   res.json('eliminados');
 };
 
-const getSemana = (turnos) => {
+const getSemana = (turnos, num) => {
   const semana = {
     lunes: [],
     martes: [],
@@ -214,33 +237,38 @@ const getSemana = (turnos) => {
     sabado: [],
     domingo: [],
   };
-  turnos.map((turno) => {
-    let fecha = new Date(turno.fecha);
-    let dia = fecha.getDay();
-    switch (dia) {
-      case 1:
-        semana.lunes.push(turno.marca);
-        break;
-      case 2:
-        semana.martes.push(turno.marca);
-        break;
-      case 3:
-        semana.miercoles.push(turno.marca);
-        break;
-      case 4:
-        semana.jueves.push(turno.marca);
-        break;
-      case 5:
-        semana.viernes.push(turno.marca);
-        break;
-      case 6:
-        semana.sabado.push(turno.marca);
-        break;
-      case 0:
-        semana.domingo.push(turno.marca);
-        break;
-    }
-  });
+  turnos
+    .filter((turno) => turno.vacunatorio === num)
+    .forEach((turno) => {
+      let fecha = new Date(turno.fecha);
+      let dia = fecha.getUTCDay();
+      switch (dia) {
+        case 1:
+          semana.lunes.push({ vacuna: turno.marca, estado: turno.presente });
+          break;
+        case 2:
+          semana.martes.push({ vacuna: turno.marca, estado: turno.presente });
+          break;
+        case 3:
+          semana.miercoles.push({
+            vacuna: turno.marca,
+            estado: turno.presente,
+          });
+          break;
+        case 4:
+          semana.jueves.push({ vacuna: turno.marca, estado: turno.presente });
+          break;
+        case 5:
+          semana.viernes.push({ vacuna: turno.marca, estado: turno.presente });
+          break;
+        case 6:
+          semana.sabado.push({ vacuna: turno.marca, estado: turno.presente });
+          break;
+        case 0:
+          semana.domingo.push({ vacuna: turno.marca, estado: turno.presente });
+          break;
+      }
+    });
   return semana;
 };
 
@@ -266,6 +294,7 @@ const sumarStock = (turnos, num) => {
   });
   return vacunas;
 };
+
 turnService.getStock = async (req, res) => {
   const turnos = await Turn.find();
   let newTurnos = [];
@@ -286,55 +315,81 @@ turnService.getStock = async (req, res) => {
   res.json(stock);
 };
 
+const addStockAndAbsent = (turnos) => {
+  const vacunas = {
+    covid: 0,
+    gripe: 0,
+    fiebre: 0,
+  };
+  const ausentes = {
+    covid: 0,
+    gripe: 0,
+    fiebre: 0,
+  };
+  turnos.map((turno) => {
+    if (turno.estado === 'falto' || turno.estado === 'ausente') {
+      switch (turno.vacuna) {
+        case 'Covid':
+          ausentes.covid++;
+          break;
+        case 'Gripe':
+          ausentes.gripe++;
+          break;
+        case 'Fiebre':
+          ausentes.fiebre++;
+          break;
+      }
+    } else {
+      switch (turno.vacuna) {
+        case 'Covid':
+          vacunas.covid++;
+          break;
+        case 'Gripe':
+          vacunas.gripe++;
+          break;
+        case 'Fiebre':
+          vacunas.fiebre++;
+          break;
+      }
+    }
+  });
+  return { vacunas, ausentes };
+};
+
 turnService.getAverage = async (req, res) => {
   const turnos = await Turn.find();
-  const date = new Date(req.body.fecha);
-  let fecha =
-    date.getDay() !== 1
-      ? date.setDate(date.getDate() - date.getDay() + 1)
-      : date;
-  fecha = new Date(fecha);
-  let finSemana = new Date(fecha);
-  finSemana = new Date(finSemana.setDate(finSemana.getDate() + 6));
-  const newTurnos = turnos.filter((turno) => {
-    let fechaTurno = new Date(turno.fecha);
-    return fechaTurno >= fecha && fechaTurno <= finSemana;
-  });
-  const vacunatorio1 = [];
-  const vacunatorio2 = [];
-  const vacunatorio3 = [];
-
-  for (const turno of newTurnos) {
-    if (turno.vacunatorio === 1) {
-      vacunatorio1.push({
-        fecha: turno.fecha,
-        marca: turno.marca,
-      });
-    } else if (turno.vacunatorio === 2) {
-      vacunatorio2.push({
-        fecha: turno.fecha,
-        marca: turno.marca,
-      });
-    } else if (turno.vacunatorio === 3) {
-      vacunatorio3.push({
-        fecha: turno.fecha,
-        marca: turno.marca,
-      });
-    }
+  const fechaInicio = new Date(req.body.fechaInicio);
+  const fechaFin = new Date(req.body.fechaFin);
+  fechaInicio.getDay() !== 1
+    ? fechaInicio.setDate(fechaInicio.getDate() - fechaInicio.getDay() + 1)
+    : fechaInicio;
+  fechaFin.getDay() !== 6
+    ? fechaFin.setDate(fechaFin.getDate() + fechaFin.getDay() + 1)
+    : fechaFin;
+  const newTurnos = turnos
+    .filter((turno) => turno.vacunatorio < 4)
+    .filter((turno) => turno.presente !== 'activo')
+    .filter((turno) => {
+      let fechaTurno = new Date(turno.fecha);
+      return (
+        fechaTurno.getTime() >= fechaInicio.getTime() &&
+        fechaTurno.getTime() <= fechaFin.getTime()
+      );
+    });
+  const stock = [];
+  for (let i = 1; i < 4; i++) {
+    stock.push(getSemana(newTurnos, i));
   }
-
-  const semanaVacunatorio1 = getSemana(vacunatorio1);
-  const semanaVacunatorio2 = getSemana(vacunatorio2);
-  const semanaVacunatorio3 = getSemana(vacunatorio3);
-  const stock = {
-    vacunatorio1: semanaVacunatorio1,
-    vacunatorio2: semanaVacunatorio2,
-    vacunatorio3: semanaVacunatorio3,
-  };
-
-  res.json({
-    stock,
-  });
+  const average = [];
+  for (let i = 0; i < 3; i++) {
+    const dias = Object.keys(stock[i]);
+    const promedio = {};
+    dias.forEach((dia) => {
+      promedio[dia] = addStockAndAbsent(stock[i][dia]);
+    });
+    average.push(promedio);
+  }
+  res.json(average);
 };
 
 turnService.getAbsent = async (req, res) => {

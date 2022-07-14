@@ -10,6 +10,7 @@ const turnoSchema = new Schema({
   vacunatorio: Number,
   vacunador: String,
   presente: String,
+  sinTurno: Number,
 });
 
 module.exports = model('Turno', turnoSchema);
