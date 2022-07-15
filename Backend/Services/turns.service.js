@@ -33,6 +33,7 @@ const generateCovid = async (list) => {
     }
   }
 };
+
 const generateGripe = async (list) => {
   const turn = await Turn.find({
     dni: list[0].dni,
@@ -439,6 +440,43 @@ turnService.addAbsent = async (req, res) => {
   }
 
   res.json({ response, vacunatorio, absent });
+};
+
+turnService.assignTurn = async (req, res) => {
+  const listas = await List.find();
+  const turnos = await Turn.find();
+  let newTurnos = [];
+  listas
+    .filter((lista) => lista.vacunatorio === Number(req.body.vacunatorio))
+    .filter(
+      (lista) => lista[req.body.vacuna] === true || lista[req.body.vacuna] > 0
+    )
+    .forEach((lista) => {
+      let vacuna =
+        req.body.vacuna.charAt(0).toUpperCase() + req.body.vacuna.slice(1);
+      let turno = turnos
+        .filter((turno) => turno.dni === lista.dni)
+        .filter((turno) => turno.marca === vacuna)
+        .filter((turno) => turno.presente !== 'aplicada');
+      if (turno === undefined || turno.length === 0) {
+        let tur = new Turn({
+          dni: lista.dni,
+          marca: vacuna,
+          fabricante: ' ',
+          dosis: vacuna === 'Covid' ? lista.covid : 0,
+          fecha: new Date(req.body.fechaTurno),
+          lote: ' ',
+          vacunatorio: req.body.vacunatorio,
+          vacunador: ' ',
+          presente: 'activo',
+          sinTurno: 0,
+        });
+        newTurnos.push(tur);
+      }
+    });
+  newTurnos = newTurnos.slice(0, Number(req.body.cantidad));
+  await Turn.insertMany(newTurnos);
+  res.json('Turnos asignados');
 };
 
 module.exports = turnService;

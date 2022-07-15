@@ -156,8 +156,11 @@ const Nav = () => {
               <Link to="/register" className="Link">
                 Registro
               </Link>
+              <Link to="/assign-shift" className="Link">
+                Asignar turnos
+              </Link>
               <Link to="/turns-admin" className="Link">
-                Turnos Admin
+                Ver Turnos
               </Link>
               <Link to="/average-day" className="Link">
                 Promedio

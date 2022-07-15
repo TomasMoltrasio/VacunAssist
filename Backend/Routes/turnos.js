@@ -11,6 +11,7 @@ const {
   getStock,
   getAbsent,
   addAbsent,
+  assignTurn,
 } = require('../Services/turns.service');
 
 const router = Router();
@@ -22,6 +23,8 @@ router.route('/stock').post(getStock);
 router.route('/average').post(getAverage);
 
 router.route('/absent').get(getAbsent).post(addAbsent);
+
+router.route('/assign').post(assignTurn);
 
 router
   .route('/:id')

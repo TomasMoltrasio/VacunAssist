@@ -2,27 +2,28 @@ const listService = {};
 const List = require('../models/ListaEspera');
 const User = require('../models/Usuario');
 
+const getEdad = (fechaNacimiento) => {
+  let hoy = new Date();
+  let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+  let diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth();
+  if (
+    diferenciaMeses < 0 ||
+    (diferenciaMeses === 0 && hoy.getDate() < fechaNacimiento.getDate())
+  ) {
+    edad--;
+  }
+  return edad;
+};
+
 listService.createEspera = async (req, res) => {
   const usuario = await User.findOne({ dni: Number(req.body.dni) });
-  function getEdad() {
-    let hoy = new Date();
-    let fechaNacimiento = usuario.fechaNacimiento;
-    let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
-    let diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth();
-    if (
-      diferenciaMeses < 0 ||
-      (diferenciaMeses === 0 && hoy.getDate() < fechaNacimiento.getDate())
-    ) {
-      edad--;
-    }
-    return edad;
-  }
+  const edad = getEdad(usuario.fechaNacimiento);
   const newList = new List({
     dni: Number(req.body.dni),
     covid: Number(req.body.covid) || -1,
     gripe: req.body.gripe || false,
     fiebre: req.body.fiebre || false,
-    edad: Number(getEdad()),
+    edad: Number(edad),
     riesgo: req.body.riesgo,
     vacunatorio: Number(req.body.vacunatorio),
   });
