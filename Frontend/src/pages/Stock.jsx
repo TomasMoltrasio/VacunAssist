@@ -72,7 +72,7 @@ const Stock = () => {
 
   useEffect(() => {
     getVacunatorios();
-  }, [vacunatorios]);
+  }, []);
 
   return (
     <div className="Stock">
